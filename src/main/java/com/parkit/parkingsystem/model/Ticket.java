@@ -1,6 +1,5 @@
 package com.parkit.parkingsystem.model;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Ticket {
@@ -10,6 +9,7 @@ public class Ticket {
     private double price;
     private Date inTime;
     private Date outTime;
+    public int setOutTime;
 
     public int getId() {
         return id;
@@ -57,5 +57,10 @@ public class Ticket {
 
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
+    }
+
+    public void setDuration(int i) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDuration'");
     }
 }

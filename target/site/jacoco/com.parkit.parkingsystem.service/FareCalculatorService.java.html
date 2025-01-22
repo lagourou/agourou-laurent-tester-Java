@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FareCalculatorService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.service</a> &gt; <span class="el_source">FareCalculatorService.java</span></div><h1>FareCalculatorService.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.service;
+
+import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.model.Ticket;
+
+<span class="fc" id="L6">public class FareCalculatorService {</span>
+
+    /**
+     * @param ticket
+     * @param discount
+     * 
+     */
+    public void calculateFare(Ticket ticket, boolean discount) {
+
+<span class="pc bpc" id="L15" title="1 of 4 branches missed.">        if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {</span>
+<span class="fc" id="L16">            throw new IllegalArgumentException(&quot;Out time provided is incorrect:&quot; + ticket.getOutTime().toString());</span>
+        }
+
+<span class="fc" id="L19">        long inTime = ticket.getInTime().getTime();</span>
+<span class="fc" id="L20">        long outTime = ticket.getOutTime().getTime();</span>
+
+        // TODO: Some tests are failing here. Need to check if this logic is correct
+
+<span class="fc" id="L24">        long duration = outTime - inTime;</span>
+<span class="fc" id="L25">        double minutes = duration / (1000.0 * 60);</span>
+<span class="fc" id="L26">        double hours = minutes / 60.0;</span>
+
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (minutes &lt;= 30) {</span>
+<span class="fc" id="L29">            ticket.setPrice(0);</span>
+<span class="fc" id="L30">            return;</span>
+        }
+        double rate;
+
+<span class="pc bpc" id="L34" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()) {</span>
+            case CAR: {
+<span class="fc" id="L36">                rate = Fare.CAR_RATE_PER_HOUR;</span>
+<span class="fc" id="L37">                ticket.setPrice(hours * rate);</span>
+<span class="fc" id="L38">                break;</span>
+            }
+            case BIKE: {
+<span class="fc" id="L41">                rate = Fare.BIKE_RATE_PER_HOUR;</span>
+<span class="fc" id="L42">                ticket.setPrice(hours * rate);</span>
+<span class="fc" id="L43">                break;</span>
+            }
+            default:
+<span class="nc" id="L46">                throw new IllegalArgumentException(&quot;Unkown Parking Type&quot;);</span>
+        }
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (discount) {</span>
+<span class="fc" id="L49">            ticket.setPrice(ticket.getPrice() * 0.95);</span>
+        }
+<span class="fc" id="L51">    }</span>
+
+    public void calculateFare(Ticket ticket) {
+<span class="nc" id="L54">        calculateFare(ticket, false);</span>
+<span class="nc" id="L55">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
