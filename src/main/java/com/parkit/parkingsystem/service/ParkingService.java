@@ -20,6 +20,7 @@ public class ParkingService {
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private TicketDAO ticketDAO;
+    public int count;
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
         this.inputReaderUtil = inputReaderUtil;
@@ -49,6 +50,7 @@ public class ParkingService {
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+                System.out.println("Welcome to the parking");
             }
         } catch (Exception e) {
             logger.error("Unable to process incoming vehicle", e);
@@ -101,11 +103,13 @@ public class ParkingService {
     public void processExitingVehicle() {
         try {
             String vehicleRegNumber = getVehichleRegNumber();
+            int count = ticketDAO.getNbTicket(vehicleRegNumber);
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
+
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket, false);
-            if (ticketDAO.updateTicket(ticket)) {
+            fareCalculatorService.calculateFare(ticket, true);
+            if (ticketDAO.updateTicket(ticket) && count != 0) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
@@ -114,6 +118,7 @@ public class ParkingService {
                         "Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             } else {
                 System.out.println("Unable to update ticket information. Error occurred");
+
             }
         } catch (Exception e) {
             logger.error("Unable to process exiting vehicle", e);
