@@ -132,8 +132,9 @@
                 <version>2.21.0</version>
                 <executions>
                     <execution>
+                    <phase>verify</phase>
                         <goals>
-                            <goal>report-only</goal>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>

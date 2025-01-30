@@ -63,4 +63,9 @@ public class Ticket {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setDuration'");
     }
+
+    public void saveTicket(Ticket ticket) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveTicket'");
+    }
 }
