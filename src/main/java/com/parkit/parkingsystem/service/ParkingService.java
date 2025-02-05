@@ -34,7 +34,7 @@ public class ParkingService {
     public void processIncomingVehicle() {
         try {
             ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
-            String vehicleRegNumber = getVehichleRegNumber();
+            String vehicleRegNumber = inputReaderUtil.readVehicleRegistrationNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             boolean discount = (ticket != null);
 
@@ -44,42 +44,28 @@ public class ParkingService {
                                                           // false
 
                 Date inTime = new Date();
-                // ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                // ticket.setId(ticketID);
-                ticket.setParkingSpot(parkingSpot);
-                ticket.setVehicleRegNumber(vehicleRegNumber);
-                ticket.setPrice(0);
-                ticket.setInTime(inTime);
-                ticket.setOutTime(null);
-                System.out.println("Generated Ticket and saved in DB");
-                System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+                if (ticket == null) {
 
-                if (!discount) {
                     ticket = new Ticket();
-                    ticket.setVehicleRegNumber(vehicleRegNumber);
-                    ticket.setInTime(new Date());
                     ticket.setParkingSpot(parkingSpot);
+                    ticket.setVehicleRegNumber(vehicleRegNumber);
+                    ticket.setPrice(0);
+                    ticket.setInTime(inTime);
                     ticketDAO.saveTicket(ticket);
+
+                    System.out.println("Generated Ticket and saved in DB");
+                    System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
+                    System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+
                 }
             }
             if (discount) {
-                parkingSpot.setAvailable(false);
-                parkingSpotDAO.updateParking(parkingSpot);
 
-                Date inTime = new Date();
-                ticket.setParkingSpot(parkingSpot);
-                ticket.setVehicleRegNumber(vehicleRegNumber);
-                ticket.setPrice(0);
-                ticket.setInTime(inTime);
-                ticket.setOutTime(null);
                 fareCalculatorService.calculateFare(ticket, true);
-
                 System.out.println("Glad to see you again");
             } else {
 
                 fareCalculatorService.calculateFare(ticket, false);
-
                 System.out.println("Welcome to the parking");
             }
         } catch (Exception e) {
@@ -111,7 +97,7 @@ public class ParkingService {
         return parkingSpot;
     }
 
-    private ParkingType getVehichleType() {
+    public ParkingType getVehichleType() {
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
@@ -152,10 +138,5 @@ public class ParkingService {
         } catch (Exception e) {
             logger.error("Unable to process exiting vehicle", e);
         }
-    }
-
-    public boolean processExitingVehicle(Ticket ticket) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'processExitingVehicle'");
     }
 }

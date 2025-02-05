@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.parkit.parkingsystem.ParkingServiceTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 3, Errors: 3, Skipped: 0, Time elapsed: 4.804 s <<< FAILURE! - in com.parkit.parkingsystem.ParkingServiceTest
-testGetNextParkingNumberIfAvailableParkingNumberNotFound  Time elapsed: 4.567 s  <<< ERROR!
+Tests run: 6, Failures: 1, Errors: 5, Skipped: 0, Time elapsed: 4.9 s <<< FAILURE! - in com.parkit.parkingsystem.ParkingServiceTest
+testGetNextParkingNumberIfAvailableParkingNumberNotFound  Time elapsed: 4.818 s  <<< ERROR!
 org.mockito.exceptions.misusing.WrongTypeOfReturnValue: 
 
 null cannot be returned by getNextAvailableSlot()
@@ -15,33 +15,28 @@ Due to the nature of the syntax above problem might occur because:
 2. A spy is stubbed using when(spy.foo()).then() syntax. It is safer to stub spies - 
    - with doReturn|Throw() family of methods. More in javadocs for Mockito.spy() method.
 
-	at com.parkit.parkingsystem.ParkingServiceTest.testGetNextParkingNumberIfAvailableParkingNumberNotFound(ParkingServiceTest.java:110)
+	at com.parkit.parkingsystem.ParkingServiceTest.testGetNextParkingNumberIfAvailableParkingNumberNotFound(ParkingServiceTest.java:144)
 
-processExitingVehicleTestUnableUpdate  Time elapsed: 0 s  <<< FAILURE!
+processExitingVehicleTestUnableUpdate  Time elapsed: 0.029 s  <<< FAILURE!
 org.mockito.exceptions.verification.WantedButNotInvoked: 
 
 Wanted but not invoked:
 ticketDAO.updateTicket(
-    com.parkit.parkingsystem.model.Ticket@4d464510
+    com.parkit.parkingsystem.model.Ticket@4cdba2ed
 );
--> at com.parkit.parkingsystem.ParkingServiceTest.processExitingVehicleTestUnableUpdate(ParkingServiceTest.java:95)
+-> at com.parkit.parkingsystem.ParkingServiceTest.processExitingVehicleTestUnableUpdate(ParkingServiceTest.java:124)
 
-However, there were exactly 3 interactions with this mock:
+However, there were exactly 2 interactions with this mock:
 ticketDAO.getNbTicket("ABCDEF");
--> at com.parkit.parkingsystem.service.ParkingService.processExitingVehicle(ParkingService.java:136)
+-> at com.parkit.parkingsystem.service.ParkingService.processExitingVehicle(ParkingService.java:122)
 
 ticketDAO.getTicket("ABCDEF");
--> at com.parkit.parkingsystem.service.ParkingService.processExitingVehicle(ParkingService.java:137)
-
-ticketDAO.updateTicket(
-    com.parkit.parkingsystem.model.Ticket@7f3ca64a
-);
--> at com.parkit.parkingsystem.service.ParkingService.processExitingVehicle(ParkingService.java:142)
+-> at com.parkit.parkingsystem.service.ParkingService.processExitingVehicle(ParkingService.java:123)
 
 
-	at com.parkit.parkingsystem.ParkingServiceTest.processExitingVehicleTestUnableUpdate(ParkingServiceTest.java:95)
+	at com.parkit.parkingsystem.ParkingServiceTest.processExitingVehicleTestUnableUpdate(ParkingServiceTest.java:124)
 
-testGetNextParkingNumberIfAvailableParkingNumberWrongArgument  Time elapsed: 0.032 s  <<< ERROR!
+testGetNextParkingNumberIfAvailableParkingNumberWrongArgument  Time elapsed: 0.02 s  <<< ERROR!
 org.mockito.exceptions.misusing.WrongTypeOfReturnValue: 
 
 null cannot be returned by getNextAvailableSlot()
@@ -54,43 +49,34 @@ Due to the nature of the syntax above problem might occur because:
 2. A spy is stubbed using when(spy.foo()).then() syntax. It is safer to stub spies - 
    - with doReturn|Throw() family of methods. More in javadocs for Mockito.spy() method.
 
-	at com.parkit.parkingsystem.ParkingServiceTest.testGetNextParkingNumberIfAvailableParkingNumberWrongArgument(ParkingServiceTest.java:118)
+	at com.parkit.parkingsystem.ParkingServiceTest.testGetNextParkingNumberIfAvailableParkingNumberWrongArgument(ParkingServiceTest.java:152)
 
-testGetNextParkingNumberIfAvailable  Time elapsed: 0.017 s  <<< FAILURE!
-org.mockito.exceptions.verification.WantedButNotInvoked: 
+testGetNextParkingNumberIfAvailable  Time elapsed: 0 s  <<< ERROR!
+java.lang.IllegalArgumentException: Entered input is invalid
+	at com.parkit.parkingsystem.ParkingServiceTest.testGetNextParkingNumberIfAvailable(ParkingServiceTest.java:132)
 
-Wanted but not invoked:
-parkingSpotDAO.getNextAvailableSlot(
-    <any com.parkit.parkingsystem.constants.ParkingType>
-);
--> at com.parkit.parkingsystem.ParkingServiceTest.testGetNextParkingNumberIfAvailable(ParkingServiceTest.java:103)
-Actually, there were zero interactions with this mock.
+processExitingVehicleTest  Time elapsed: 0.013 s  <<< ERROR!
+org.mockito.exceptions.misusing.WrongTypeOfReturnValue: 
 
-	at com.parkit.parkingsystem.ParkingServiceTest.testGetNextParkingNumberIfAvailable(ParkingServiceTest.java:103)
+null cannot be returned by getNbTicket()
+getNbTicket() should return int
+***
+If you're unsure why you're getting above error read on.
+Due to the nature of the syntax above problem might occur because:
+1. This exception *might* occur in wrongly written multi-threaded tests.
+   Please refer to Mockito FAQ on limitations of concurrency testing.
+2. A spy is stubbed using when(spy.foo()).then() syntax. It is safer to stub spies - 
+   - with doReturn|Throw() family of methods. More in javadocs for Mockito.spy() method.
 
-processExitingVehicleTest  Time elapsed: 0 s  <<< ERROR!
+	at com.parkit.parkingsystem.ParkingServiceTest.processExitingVehicleTest(ParkingServiceTest.java:74)
+
+testProcessIncomingVehicle  Time elapsed: 0.02 s  <<< ERROR!
 org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
 
 Unnecessary stubbings detected.
 Clean & maintainable test code requires zero unnecessary code.
 Following stubbings are unnecessary (click to navigate to relevant line of code):
-  1. -> at com.parkit.parkingsystem.ParkingServiceTest.setUpPerTest(ParkingServiceTest.java:60)
-  2. -> at com.parkit.parkingsystem.ParkingServiceTest.setUpPerTest(ParkingServiceTest.java:61)
+  1. -> at com.parkit.parkingsystem.ParkingServiceTest.setUpPerTest(ParkingServiceTest.java:52)
+  2. -> at com.parkit.parkingsystem.ParkingServiceTest.setUpPerTest(ParkingServiceTest.java:54)
 Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
-
-testProcessIncomingVehicle  Time elapsed: 0.024 s  <<< FAILURE!
-org.mockito.exceptions.verification.WantedButNotInvoked: 
-
-Wanted but not invoked:
-ticketDAO.saveTicket(
-    <any com.parkit.parkingsystem.model.Ticket>
-);
--> at com.parkit.parkingsystem.ParkingServiceTest.testProcessIncomingVehicle(ParkingServiceTest.java:83)
-
-However, there was exactly 1 interaction with this mock:
-ticketDAO.getTicket("ABCDEF");
--> at com.parkit.parkingsystem.service.ParkingService.processIncomingVehicle(ParkingService.java:38)
-
-
-	at com.parkit.parkingsystem.ParkingServiceTest.testProcessIncomingVehicle(ParkingServiceTest.java:83)
 
