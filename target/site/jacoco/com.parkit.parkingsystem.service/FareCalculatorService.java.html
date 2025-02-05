@@ -12,7 +12,7 @@ import com.parkit.parkingsystem.model.Ticket;
      */
     public void calculateFare(Ticket ticket, boolean discount) {
 
-<span class="pc bpc" id="L15" title="1 of 4 branches missed.">        if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {</span>
+<span class="fc bfc" id="L15" title="All 4 branches covered.">        if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {</span>
 <span class="fc" id="L16">            throw new IllegalArgumentException(&quot;Out time provided is incorrect:&quot; + ticket.getOutTime().toString());</span>
         }
 

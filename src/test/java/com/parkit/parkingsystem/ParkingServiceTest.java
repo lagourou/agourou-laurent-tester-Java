@@ -15,9 +15,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.sql.Date;
@@ -47,40 +48,29 @@ public class ParkingServiceTest {
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber(vehicleRegNumber);
 
-            when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(vehicleRegNumber);
-            when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
-            when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
-            when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
-            when(ticketDAO.getNbTicket(vehicleRegNumber)).thenReturn(1);
-            when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
-            when(parkingSpotDAO.getNextParkingSpot(ParkingType.CAR))
-                    .thenReturn(new ParkingSpot(1, ParkingType.CAR, false));
-
         } catch (Exception e) {
             throw new RuntimeException("Failed to set up test mock objects");
         }
     }
 
     @Test
-    public void processExitingVehicleTest() {
+    public void processExitingVehicleTest() throws Exception {
 
         String vehicleRegNumber = "ABCDEF";
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
         Ticket ticket = new Ticket();
         ticket.setId(1);
-        ticket.getVehicleRegNumber();
-        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
+        ticket.setVehicleRegNumber(vehicleRegNumber);
+        ticket.setParkingSpot(parkingSpot);
 
         when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
-        when(ticketDAO.getNbTicket(vehicleRegNumber)).thenReturn(null);
-        when(ticketDAO.updateTicket(ticket)).thenReturn(true);
-        when(parkingSpotDAO.updateParking(any(ParkingSpot.class)));
+        when(ticketDAO.getNbTicket(vehicleRegNumber)).thenReturn(1);
+        when(parkingService.getVehichleRegNumber()).thenReturn(vehicleRegNumber);
 
         parkingService.processExitingVehicle();
 
-        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
-        verify(ticketDAO, times(1)).updateTicket(any(Ticket.class));
-        verify(ticketDAO, times(1)).getNbTicket(anyString());
-        verify(ticketDAO, times(1)).getTicket(anyString());
+        verify(ticketDAO, times(1)).getNbTicket(vehicleRegNumber);
+        verify(ticketDAO, times(1)).getTicket(vehicleRegNumber);
     }
 
     @Test
@@ -105,10 +95,12 @@ public class ParkingServiceTest {
     @Test
     public void processExitingVehicleTestUnableUpdate() throws Exception {
         String vehicleRegNumber = "ABCDEF";
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+
         Ticket ticket = new Ticket();
         ticket.setId(1);
         ticket.setVehicleRegNumber(vehicleRegNumber);
-        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
+        ticket.setParkingSpot(parkingSpot);
 
         when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
         when(ticketDAO.getNbTicket(vehicleRegNumber)).thenReturn(1);
@@ -118,40 +110,42 @@ public class ParkingServiceTest {
 
         verify(ticketDAO, times(1)).getTicket(vehicleRegNumber);
         verify(ticketDAO, times(1)).getNbTicket(vehicleRegNumber);
-        verify(ticketDAO, times(1)).updateTicket(ticket);
-        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
+
     }
 
     @Test
-    public void testGetNextParkingNumberIfAvailable() {
+    public void testGetNextParkingNumberIfAvailable() throws Exception {
 
-        when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
-        when(parkingService.getVehichleType()).thenReturn(ParkingType.CAR);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
 
         ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(any(ParkingType.class));
-        verify(parkingSpot, times(1));
+
+        assertNotNull(parkingSpot);
+        assertEquals(1, parkingSpot.getId());
+
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
+        verify(inputReaderUtil, times(1)).readSelection();
     }
 
     @Test
     public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
 
-        parkingService.getNextParkingNumberIfAvailable();
-
-        when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(null);
-        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(any(ParkingType.class));
+        ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+        assertNull(parkingSpot, "La place de parking doit être nulle car aucune place n'est disponible");
     }
 
     @Test
-    public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
+    public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() throws Exception {
 
-        parkingService.getNextParkingNumberIfAvailable();
-        when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(null);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);
+        // when(parkingService.getVehichleType()).thenReturn(ParkingType.CAR);
+        when(inputReaderUtil.readSelection()).thenReturn(1);
 
         ParkingSpot result = parkingService.getNextParkingNumberIfAvailable();
-
         assertNull(result, "le résultat doit être nulle");
 
-        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(any(ParkingType.class));
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
     }
 }

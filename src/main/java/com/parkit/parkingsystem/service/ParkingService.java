@@ -36,7 +36,8 @@ public class ParkingService {
             ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
             String vehicleRegNumber = inputReaderUtil.readVehicleRegistrationNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-            boolean discount = (ticket != null);
+            int nbTicket = ticketDAO.getNbTicket(vehicleRegNumber);
+            boolean discount = nbTicket > 0;
 
             if (parkingSpot != null && parkingSpot.getId() > 0) {
                 parkingSpot.setAvailable(false);
@@ -73,7 +74,7 @@ public class ParkingService {
         }
     }
 
-    private String getVehichleRegNumber() throws Exception {
+    public String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
@@ -125,10 +126,14 @@ public class ParkingService {
 
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket, false);
+
             if (ticketDAO.updateTicket(ticket) && count != 0) {
+
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
-                parkingSpot.setAvailable(true);
+
                 parkingSpotDAO.updateParking(parkingSpot);
+                parkingSpot.setAvailable(true);
+
                 System.out.println("Please pay the parking fare:" + ticket.getPrice());
                 System.out.println(
                         "Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);

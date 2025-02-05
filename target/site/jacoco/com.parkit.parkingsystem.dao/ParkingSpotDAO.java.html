@@ -30,7 +30,7 @@ import java.sql.ResultSet;
             }
 <span class="nc" id="L31">            dataBaseConfig.closeResultSet(rs);</span>
 <span class="nc" id="L32">            dataBaseConfig.closePreparedStatement(ps);</span>
-<span class="fc" id="L33">        } catch (Exception ex) {</span>
+<span class="pc" id="L33">        } catch (Exception ex) {</span>
 <span class="fc" id="L34">            logger.error(&quot;Error fetching next available slot&quot;, ex);</span>
         } finally {
 <span class="fc" id="L36">            dataBaseConfig.closeConnection(con);</span>
@@ -39,11 +39,11 @@ import java.sql.ResultSet;
     }
 
     public ParkingSpot getNextParkingSpot(ParkingType parkingType) {
-<span class="nc" id="L42">        int nextAvailableSlot = getNextAvailableSlot(parkingType);</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (nextAvailableSlot &gt; 0) {</span>
+<span class="fc" id="L42">        int nextAvailableSlot = getNextAvailableSlot(parkingType);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (nextAvailableSlot &gt; 0) {</span>
 <span class="nc" id="L44">            return new ParkingSpot(nextAvailableSlot, parkingType, true);</span>
         }
-<span class="nc" id="L46">        return null;</span>
+<span class="fc" id="L46">        return null;</span>
     }
 
     public boolean updateParking(ParkingSpot parkingSpot) {
