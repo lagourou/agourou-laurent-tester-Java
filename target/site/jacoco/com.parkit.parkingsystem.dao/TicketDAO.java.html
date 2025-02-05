@@ -13,11 +13,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
-<span class="nc" id="L16">public class TicketDAO {</span>
+<span class="fc" id="L16">public class TicketDAO {</span>
 
 <span class="fc" id="L18">    private static final Logger logger = LogManager.getLogger(&quot;TicketDAO&quot;);</span>
 
-<span class="nc" id="L20">    public DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
+<span class="fc" id="L20">    public DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
 
     public int count;
 
@@ -43,8 +43,8 @@ import java.sql.Timestamp;
     }
 
     public Ticket getTicket(String vehicleRegNumber) {
-<span class="nc" id="L46">        Connection con = null;</span>
-<span class="nc" id="L47">        Ticket ticket = null;</span>
+<span class="fc" id="L46">        Connection con = null;</span>
+<span class="fc" id="L47">        Ticket ticket = null;</span>
         try {
 <span class="nc" id="L49">            con = dataBaseConfig.getConnection();</span>
 <span class="nc" id="L50">            PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);</span>
@@ -63,12 +63,12 @@ import java.sql.Timestamp;
             }
 <span class="nc" id="L64">            dataBaseConfig.closeResultSet(rs);</span>
 <span class="nc" id="L65">            dataBaseConfig.closePreparedStatement(ps);</span>
-<span class="nc" id="L66">        } catch (Exception ex) {</span>
-<span class="nc" id="L67">            logger.error(&quot;Error fetching next available slot&quot;, ex);</span>
+<span class="fc" id="L66">        } catch (Exception ex) {</span>
+<span class="fc" id="L67">            logger.error(&quot;Error fetching next available slot&quot;, ex);</span>
         } finally {
-<span class="nc" id="L69">            dataBaseConfig.closeConnection(con);</span>
+<span class="fc" id="L69">            dataBaseConfig.closeConnection(con);</span>
         }
-<span class="nc" id="L71">        return ticket;</span>
+<span class="fc" id="L71">        return ticket;</span>
     }
 
     public boolean updateTicket(Ticket ticket) {
@@ -90,8 +90,8 @@ import java.sql.Timestamp;
     }
 
     public int getNbTicket(String vehicleRegNumber) {
-<span class="nc" id="L93">        Connection con = null;</span>
-<span class="nc" id="L94">        int count = 0;</span>
+<span class="fc" id="L93">        Connection con = null;</span>
+<span class="fc" id="L94">        int count = 0;</span>
         try {
 <span class="nc" id="L96">            con = dataBaseConfig.getConnection();</span>
 <span class="nc" id="L97">            PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKET);</span>
@@ -103,12 +103,12 @@ import java.sql.Timestamp;
             }
 <span class="nc" id="L104">            dataBaseConfig.closeResultSet(rs);</span>
 <span class="nc" id="L105">            dataBaseConfig.closePreparedStatement(ps);</span>
-<span class="nc" id="L106">        } catch (Exception ex) {</span>
-<span class="nc" id="L107">            logger.error(&quot;Counting error&quot;, ex);</span>
+<span class="fc" id="L106">        } catch (Exception ex) {</span>
+<span class="fc" id="L107">            logger.error(&quot;Counting error&quot;, ex);</span>
         } finally {
-<span class="nc" id="L109">            dataBaseConfig.closeConnection(con);</span>
+<span class="fc" id="L109">            dataBaseConfig.closeConnection(con);</span>
         }
-<span class="nc" id="L111">        return count;</span>
+<span class="fc" id="L111">        return count;</span>
     }
 
 }

@@ -39,8 +39,10 @@ public class ParkingSpot {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ParkingSpot that = (ParkingSpot) o;
         return number == that.number;
     }
@@ -48,5 +50,10 @@ public class ParkingSpot {
     @Override
     public int hashCode() {
         return number;
+    }
+
+    public ParkingSpot updateParking(ParkingSpot parkingSpot) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateParking'");
     }
 }

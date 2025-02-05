@@ -33,7 +33,7 @@ public class TicketDAO {
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
-            return ps.execute();
+            return ps.executeUpdate() > 0;
         } catch (Exception ex) {
             logger.error("Error fetching next available slot", ex);
         } finally {
@@ -69,6 +69,7 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return ticket;
+
     }
 
     public boolean updateTicket(Ticket ticket) {

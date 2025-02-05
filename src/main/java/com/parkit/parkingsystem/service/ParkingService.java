@@ -33,12 +33,12 @@ public class ParkingService {
 
     public void processIncomingVehicle() {
         try {
-            ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
+            ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
+            String vehicleRegNumber = getVehichleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             boolean discount = (ticket != null);
 
             if (parkingSpot != null && parkingSpot.getId() > 0) {
-                String vehicleRegNumber = getVehichleRegNumber();
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
                                                           // false
@@ -51,13 +51,19 @@ public class ParkingService {
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
-                ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+
+                if (!discount) {
+                    ticket = new Ticket();
+                    ticket.setVehicleRegNumber(vehicleRegNumber);
+                    ticket.setInTime(new Date());
+                    ticket.setParkingSpot(parkingSpot);
+                    ticketDAO.saveTicket(ticket);
+                }
             }
             if (discount) {
-                String vehicleRegNumber = getVehichleRegNumber();
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);
 
@@ -67,22 +73,11 @@ public class ParkingService {
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
-                ticketDAO.saveTicket(ticket);
                 fareCalculatorService.calculateFare(ticket, true);
 
                 System.out.println("Glad to see you again");
             } else {
-                String vehicleRegNumber = getVehichleRegNumber();
-                parkingSpot.setAvailable(false);
-                parkingSpotDAO.updateParking(parkingSpot);
 
-                Date inTime = new Date();
-                ticket.setParkingSpot(parkingSpot);
-                ticket.setVehicleRegNumber(vehicleRegNumber);
-                ticket.setPrice(0);
-                ticket.setInTime(inTime);
-                ticket.setOutTime(null);
-                ticketDAO.saveTicket(ticket);
                 fareCalculatorService.calculateFare(ticket, false);
 
                 System.out.println("Welcome to the parking");
@@ -157,5 +152,10 @@ public class ParkingService {
         } catch (Exception e) {
             logger.error("Unable to process exiting vehicle", e);
         }
+    }
+
+    public boolean processExitingVehicle(Ticket ticket) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'processExitingVehicle'");
     }
 }
