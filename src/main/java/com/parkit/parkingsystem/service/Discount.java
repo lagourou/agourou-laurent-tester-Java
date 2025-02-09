@@ -1,5 +1,5 @@
 package com.parkit.parkingsystem.service;
 
-public class Discount {
+public interface Discount {
 
 }

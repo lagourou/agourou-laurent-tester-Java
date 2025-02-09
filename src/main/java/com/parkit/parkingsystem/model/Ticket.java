@@ -9,7 +9,6 @@ public class Ticket {
     private double price;
     private Date inTime;
     private Date outTime;
-    public int setOutTime;
 
     public int getId() {
         return id;
@@ -60,12 +59,11 @@ public class Ticket {
     }
 
     public void setDuration(int i) {
-        // TODO Auto-generated method stub
+
         throw new UnsupportedOperationException("Unimplemented method 'setDuration'");
     }
 
     public Ticket saveTicket(Ticket ticket) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveTicket'");
     }
 }

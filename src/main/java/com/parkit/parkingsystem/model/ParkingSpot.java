@@ -53,7 +53,11 @@ public class ParkingSpot {
     }
 
     public ParkingSpot updateParking(ParkingSpot parkingSpot) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateParking'");
+
+        this.number = parkingSpot.getId();
+        this.parkingType = parkingSpot.getParkingType();
+        this.isAvailable = parkingSpot.isAvailable();
+
+        return this;
     }
 }

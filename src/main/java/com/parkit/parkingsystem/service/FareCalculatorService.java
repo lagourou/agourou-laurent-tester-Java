@@ -19,8 +19,6 @@ public class FareCalculatorService {
         long inTime = ticket.getInTime().getTime();
         long outTime = ticket.getOutTime().getTime();
 
-        // TODO: Some tests are failing here. Need to check if this logic is correct
-
         long duration = outTime - inTime;
         double minutes = duration / (1000.0 * 60);
         double hours = minutes / 60.0;

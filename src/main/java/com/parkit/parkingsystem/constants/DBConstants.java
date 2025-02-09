@@ -2,6 +2,11 @@ package com.parkit.parkingsystem.constants;
 
 public class DBConstants {
 
+    // Private constructor to hide the implicit public one
+    private DBConstants() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static final String GET_NEXT_PARKING_SPOT = "select min(PARKING_NUMBER) from parking where AVAILABLE = true and TYPE = ?";
     public static final String UPDATE_PARKING_SPOT = "update parking set available = ? where PARKING_NUMBER = ?";
 

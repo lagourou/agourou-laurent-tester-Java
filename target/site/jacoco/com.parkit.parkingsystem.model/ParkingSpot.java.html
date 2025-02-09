@@ -49,12 +49,16 @@ public class ParkingSpot {
 
     @Override
     public int hashCode() {
-<span class="fc" id="L52">        return number;</span>
+<span class="nc" id="L52">        return number;</span>
     }
 
     public ParkingSpot updateParking(ParkingSpot parkingSpot) {
-        // TODO Auto-generated method stub
-<span class="nc" id="L57">        throw new UnsupportedOperationException(&quot;Unimplemented method 'updateParking'&quot;);</span>
+
+<span class="nc" id="L57">        this.number = parkingSpot.getId();</span>
+<span class="nc" id="L58">        this.parkingType = parkingSpot.getParkingType();</span>
+<span class="nc" id="L59">        this.isAvailable = parkingSpot.isAvailable();</span>
+
+<span class="nc" id="L61">        return this;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

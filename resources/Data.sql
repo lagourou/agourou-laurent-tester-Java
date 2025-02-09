@@ -1,53 +1,64 @@
 /* Setting up PROD DB */
-create database prod;
-use prod;
+CREATE DATABASE IF NOT EXISTS prod;
+USE prod;
 
-create table parking(
-PARKING_NUMBER int PRIMARY KEY,
-AVAILABLE bool NOT NULL,
-TYPE varchar(10) NOT NULL
+CREATE TABLE IF NOT EXISTS parking(
+    PARKING_NUMBER INT PRIMARY KEY,
+    AVAILABLE TINYINT(1) NOT NULL,  -- Remplacer bool par TINYINT(1) pour assurer la compatibilité
+    TYPE VARCHAR(10) NOT NULL
 );
 
-create table ticket(
- ID int PRIMARY KEY AUTO_INCREMENT,
- PARKING_NUMBER int NOT NULL,
- VEHICLE_REG_NUMBER varchar(10) NOT NULL,
- PRICE double,
- IN_TIME DATETIME NOT NULL,
- OUT_TIME DATETIME,
- FOREIGN KEY (PARKING_NUMBER)
- REFERENCES parking(PARKING_NUMBER));
+CREATE TABLE IF NOT EXISTS ticket(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    PARKING_NUMBER INT NOT NULL,
+    VEHICLE_REG_NUMBER VARCHAR(10) NOT NULL,
+    PRICE DOUBLE,
+    IN_TIME DATETIME NOT NULL,
+    OUT_TIME DATETIME,
+    FOREIGN KEY (PARKING_NUMBER) REFERENCES parking(PARKING_NUMBER)
+);
 
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(1,true,'CAR');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(2,true,'CAR');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(3,true,'CAR');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'BIKE');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'BIKE');
-commit;
+-- Remplissage des données pour les tests
+INSERT INTO parking(PARKING_NUMBER, AVAILABLE, TYPE) 
+VALUES 
+(1, 1, 'CAR'),
+(2, 1, 'CAR'),
+(3, 1, 'CAR'),
+(4, 1, 'BIKE'),
+(5, 1, 'BIKE');
+
+COMMIT;
+
 
 /* Setting up TEST DB */
-create database test;
-use test;
+CREATE DATABASE IF NOT EXISTS test;
+USE test;
 
-create table parking(
-PARKING_NUMBER int PRIMARY KEY,
-AVAILABLE bool NOT NULL,
-TYPE varchar(10) NOT NULL
+CREATE TABLE IF NOT EXISTS parking(
+    PARKING_NUMBER INT PRIMARY KEY,
+    AVAILABLE TINYINT(1) NOT NULL,  -- Remplacer bool par TINYINT(1) pour assurer la compatibilité
+    TYPE VARCHAR(10) NOT NULL
 );
 
-create table ticket(
- ID int PRIMARY KEY AUTO_INCREMENT,
- PARKING_NUMBER int NOT NULL,
- VEHICLE_REG_NUMBER varchar(10) NOT NULL,
- PRICE double,
- IN_TIME DATETIME NOT NULL,
- OUT_TIME DATETIME,
- FOREIGN KEY (PARKING_NUMBER)
- REFERENCES parking(PARKING_NUMBER));
+CREATE TABLE IF NOT EXISTS ticket(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    PARKING_NUMBER INT NOT NULL,
+    VEHICLE_REG_NUMBER VARCHAR(10) NOT NULL,
+    PRICE DOUBLE,
+    IN_TIME DATETIME NOT NULL,
+    OUT_TIME DATETIME,
+    FOREIGN KEY (PARKING_NUMBER) REFERENCES parking(PARKING_NUMBER)
+);
 
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(1,true,'CAR');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(2,true,'CAR');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(3,true,'CAR');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'BIKE');
-insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'BIKE');
-commit;
+-- Insérer les données de test
+INSERT INTO parking(PARKING_NUMBER, AVAILABLE, TYPE) 
+VALUES 
+(1, 1, 'CAR'),
+(2, 1, 'CAR'),
+(3, 1, 'CAR'),
+(4, 1, 'BIKE'),
+(5, 1, 'BIKE');
+
+-- Exemple d'insertion d'un ticket dans la base de données
+INSERT INTO ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+VALUES (1, 'ABC123', 10.5, '2025-02-09 08:00:00', '2025-02-09 10:00:00');
