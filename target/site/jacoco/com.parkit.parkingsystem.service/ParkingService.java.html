@@ -154,22 +154,22 @@ public class ParkingService {
 <span class="fc" id="L154">            ticket.setOutTime(outTime);</span>
 <span class="nc" id="L155">            fareCalculatorService.calculateFare(ticket, false);</span>
 
-<span class="nc bnc" id="L157" title="All 4 branches missed.">            if (ticketDAO.updateTicket(ticket) &amp;&amp; ticketCount != 0) {</span>
+<span class="nc bnc" id="L157" title="All 4 branches missed.">            if (ticketDAO.updateTicket(ticket) &amp;&amp; ticketCount &gt; 0) {</span>
 
 <span class="nc" id="L159">                ParkingSpot parkingSpot = ticket.getParkingSpot();</span>
+<span class="nc" id="L160">                parkingSpotDAO.updateParking(parkingSpot);</span>
+<span class="nc" id="L161">                parkingSpot.setAvailable(true);</span>
 
-<span class="nc" id="L161">                parkingSpotDAO.updateParking(parkingSpot);</span>
-<span class="nc" id="L162">                parkingSpot.setAvailable(true);</span>
-
-<span class="nc" id="L164">                logger.info(&quot;Please park your vehicle in spot number: {}&quot;, parkingSpot.getId());</span>
-<span class="nc" id="L165">                logger.info(&quot;Please pay the parking fare: {}&quot;, ticket.getPrice());</span>
-<span class="nc" id="L166">                logger.info(&quot;Recorded out-time for vehicle number: {} is: {}&quot;, ticket.getVehicleRegNumber(), outTime);</span>
-<span class="nc" id="L167">            } else {</span>
-<span class="nc" id="L168">                logger.info(&quot;Unable to update ticket information. Error occurred&quot;);</span>
+<span class="nc" id="L163">                logger.info(&quot;Please park your vehicle in spot number: {}&quot;, parkingSpot.getId());</span>
+<span class="nc" id="L164">                logger.info(&quot;Please pay the parking fare: {}&quot;, ticket.getPrice());</span>
+<span class="nc" id="L165">                logger.info(&quot;Recorded out-time for vehicle number: {} is: {}&quot;, ticket.getVehicleRegNumber(), outTime);</span>
+<span class="nc" id="L166">            } else {</span>
+<span class="nc" id="L167">                logger.info(&quot;Unable to update ticket information. Error occurred&quot;);</span>
             }
-<span class="pc" id="L170">        } catch (Exception e) {</span>
-<span class="fc" id="L171">            logger.error(&quot;Unable to process exiting vehicle&quot;, e);</span>
+<span class="pc" id="L169">        } catch (Exception e) {</span>
+<span class="fc" id="L170">            logger.error(&quot;Unable to process exiting vehicle&quot;, e);</span>
         }
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L172">    }</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

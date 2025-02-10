@@ -70,6 +70,7 @@ class ParkingServiceTest {
 
         verify(ticketDAO, times(1)).getNbTicket(VEHICLE_REG_NUMBER);
         verify(ticketDAO, times(1)).getTicket(VEHICLE_REG_NUMBER);
+
     }
 
     @Test
@@ -91,7 +92,7 @@ class ParkingServiceTest {
 
     @Test
     void processExitingVehicleTestUnableUpdate() throws Exception {
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        ParkingSpot parkingSpot = mock(ParkingSpot.class);
 
         Ticket ticket = new Ticket();
         ticket.setId(1);
@@ -101,11 +102,13 @@ class ParkingServiceTest {
         when(ticketDAO.getNbTicket(VEHICLE_REG_NUMBER)).thenReturn(1);
         when(ticketDAO.getTicket(VEHICLE_REG_NUMBER)).thenReturn(ticket);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(VEHICLE_REG_NUMBER);
+        lenient().when(ticketDAO.updateTicket(ticket)).thenReturn(false);
 
         parkingService.processExitingVehicle();
 
         verify(ticketDAO, times(1)).getNbTicket(VEHICLE_REG_NUMBER);
         verify(ticketDAO, times(1)).getTicket(VEHICLE_REG_NUMBER);
+        verify(ticketDAO, times(0)).updateTicket(ticket);
 
     }
 

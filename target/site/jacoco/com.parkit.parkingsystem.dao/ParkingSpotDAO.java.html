@@ -12,21 +12,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-<span class="fc" id="L15">public class ParkingSpotDAO {</span>
+<span class="nc" id="L15">public class ParkingSpotDAO {</span>
 <span class="fc" id="L16">    private static final Logger logger = LogManager.getLogger(&quot;ParkingSpotDAO&quot;);</span>
 
-<span class="fc" id="L18">    protected DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
+<span class="nc" id="L18">    protected DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
 
     public void save(ParkingSpot parkingSpot) {
         // Implementation to save the parking spot to the database
-<span class="fc" id="L22">    }</span>
+<span class="nc" id="L22">    }</span>
 
     public void setDataBaseConfig(DataBaseConfig dataBaseConfig) {
-<span class="fc" id="L25">        this.dataBaseConfig = dataBaseConfig;</span>
-<span class="fc" id="L26">    }</span>
+<span class="nc" id="L25">        this.dataBaseConfig = dataBaseConfig;</span>
+<span class="nc" id="L26">    }</span>
 
     public int getNextAvailableSlot(ParkingType parkingType) {
-<span class="fc" id="L29">        int result = -1;</span>
+<span class="nc" id="L29">        int result = -1;</span>
 <span class="nc" id="L30">        try (Connection con = dataBaseConfig.getConnection();</span>
 <span class="nc" id="L31">                PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT)) {</span>
 <span class="nc" id="L32">            ps.setString(1, parkingType.toString());</span>
@@ -35,18 +35,18 @@ import java.sql.SQLException;
 <span class="nc" id="L35">                    result = rs.getInt(1);</span>
                 }
             }
-<span class="fc" id="L38">        } catch (Exception ex) {</span>
-<span class="fc" id="L39">            logger.error(&quot;Error fetching next available slot&quot;, ex);</span>
+<span class="nc" id="L38">        } catch (Exception ex) {</span>
+<span class="nc" id="L39">            logger.error(&quot;Error fetching next available slot&quot;, ex);</span>
 <span class="nc" id="L40">        }</span>
-<span class="fc" id="L41">        return result;</span>
+<span class="nc" id="L41">        return result;</span>
     }
 
     public ParkingSpot getNextParkingSpot(ParkingType parkingType) {
-<span class="fc" id="L45">        int nextAvailableSlot = getNextAvailableSlot(parkingType);</span>
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (nextAvailableSlot &gt; 0) {</span>
+<span class="nc" id="L45">        int nextAvailableSlot = getNextAvailableSlot(parkingType);</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (nextAvailableSlot &gt; 0) {</span>
 <span class="nc" id="L47">            return new ParkingSpot(nextAvailableSlot, parkingType, true);</span>
         }
-<span class="fc" id="L49">        return null;</span>
+<span class="nc" id="L49">        return null;</span>
     }
 
     public boolean updateParking(ParkingSpot parkingSpot) {
