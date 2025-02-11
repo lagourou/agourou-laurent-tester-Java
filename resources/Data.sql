@@ -1,10 +1,10 @@
-/* Setting up PROD DB */
+
 CREATE DATABASE IF NOT EXISTS prod;
 USE prod;
 
 CREATE TABLE IF NOT EXISTS parking(
     PARKING_NUMBER INT PRIMARY KEY,
-    AVAILABLE TINYINT(1) NOT NULL,  -- Remplacer bool par TINYINT(1) pour assurer la compatibilité
+    AVAILABLE TINYINT(1) NOT NULL, 
     TYPE VARCHAR(10) NOT NULL
 );
 
@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS ticket(
     FOREIGN KEY (PARKING_NUMBER) REFERENCES parking(PARKING_NUMBER)
 );
 
--- Remplissage des données pour les tests
 INSERT INTO parking(PARKING_NUMBER, AVAILABLE, TYPE) 
 VALUES 
 (1, 1, 'CAR'),
@@ -30,13 +29,12 @@ VALUES
 COMMIT;
 
 
-/* Setting up TEST DB */
 CREATE DATABASE IF NOT EXISTS test;
 USE test;
 
 CREATE TABLE IF NOT EXISTS parking(
     PARKING_NUMBER INT PRIMARY KEY,
-    AVAILABLE TINYINT(1) NOT NULL,  -- Remplacer bool par TINYINT(1) pour assurer la compatibilité
+    AVAILABLE TINYINT(1) NOT NULL,
     TYPE VARCHAR(10) NOT NULL
 );
 
@@ -50,7 +48,6 @@ CREATE TABLE IF NOT EXISTS ticket(
     FOREIGN KEY (PARKING_NUMBER) REFERENCES parking(PARKING_NUMBER)
 );
 
--- Insérer les données de test
 INSERT INTO parking(PARKING_NUMBER, AVAILABLE, TYPE) 
 VALUES 
 (1, 1, 'CAR'),
@@ -59,6 +56,5 @@ VALUES
 (4, 1, 'BIKE'),
 (5, 1, 'BIKE');
 
--- Exemple d'insertion d'un ticket dans la base de données
 INSERT INTO ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 VALUES (1, 'ABC123', 10.5, '2025-02-09 08:00:00', '2025-02-09 10:00:00');

@@ -7,6 +7,7 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +16,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.sql.Date;
@@ -32,32 +31,85 @@ class ParkingServiceTest {
     private ParkingSpotDAO parkingSpotDAO;
     @Mock
     private TicketDAO ticketDAO;
+    @Mock
+    private FareCalculatorService fareCalculatorService;
     @InjectMocks
     private ParkingService parkingService;
 
     private static final String VEHICLE_REG_NUMBER = "ABCDEF";
+    private ParkingSpot parkingSpot;
+    private Ticket ticket;
 
     @BeforeEach
     private void setUpPerTest() {
-        try {
-            MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.openMocks(this);
 
-            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
-            Ticket ticket = new Ticket();
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        ticket = new Ticket();
 
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-            ticket.setParkingSpot(parkingSpot);
-            ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to set up test mock objects");
-        }
+        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
+    }
+
+    @Test
+    void testProcessIncomingVehicle() throws Exception {
+
+        when(ticketDAO.getTicket(VEHICLE_REG_NUMBER)).thenReturn(null);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(VEHICLE_REG_NUMBER);
+
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
+        when(parkingSpotDAO.getNextParkingSpot(ParkingType.CAR)).thenReturn(parkingSpot);
+
+        parkingService.processIncomingVehicle();
+
+        verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
+        verify(ticketDAO, times(1)).getTicket(VEHICLE_REG_NUMBER);
+        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
+        verify(parkingSpotDAO, times(1)).getNextParkingSpot(ParkingType.CAR);
+    }
+
+    @Test
+    void testGetNextParkingNumberIfAvailable() {
+
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+
+        parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+
+        assertNotNull(parkingSpot);
+        assertEquals(1, parkingSpot.getId());
+
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
+        verify(inputReaderUtil, times(1)).readSelection();
+    }
+
+    @Test
+    void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
+
+        parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+        assertNull(parkingSpot, "La place de parking doit être nulle car aucune place n'est disponible");
+    }
+
+    @Test
+    void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
+
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+
+        ParkingSpot result = parkingService.getNextParkingNumberIfAvailable();
+        assertNull(result, "le résultat doit être nulle");
+
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
     }
 
     @Test
     void processExitingVehicleTest() throws Exception {
 
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
-        Ticket ticket = new Ticket();
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        ticket = new Ticket();
         ticket.setId(1);
         ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
         ticket.setParkingSpot(parkingSpot);
@@ -74,27 +126,10 @@ class ParkingServiceTest {
     }
 
     @Test
-    void testProcessIncomingVehicle() throws Exception {
-
-        when(ticketDAO.getTicket(VEHICLE_REG_NUMBER)).thenReturn(null);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(VEHICLE_REG_NUMBER);
-
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
-        when(parkingSpotDAO.getNextParkingSpot(ParkingType.CAR)).thenReturn(parkingSpot);
-
-        parkingService.processIncomingVehicle();
-
-        verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
-        verify(ticketDAO, times(1)).getTicket(VEHICLE_REG_NUMBER);
-        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
-        verify(parkingSpotDAO, times(1)).getNextParkingSpot(ParkingType.CAR);
-    }
-
-    @Test
     void processExitingVehicleTestUnableUpdate() throws Exception {
-        ParkingSpot parkingSpot = mock(ParkingSpot.class);
+        parkingSpot = mock(ParkingSpot.class);
 
-        Ticket ticket = new Ticket();
+        ticket = new Ticket();
         ticket.setId(1);
         ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
         ticket.setParkingSpot(parkingSpot);
@@ -113,38 +148,17 @@ class ParkingServiceTest {
     }
 
     @Test
-    void testGetNextParkingNumberIfAvailable() {
+    void processExitingVehicleSucessfulUpdate() throws Exception {
 
-        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+        when(ticketDAO.getNbTicket(VEHICLE_REG_NUMBER)).thenReturn(1);
+        when(ticketDAO.getTicket(VEHICLE_REG_NUMBER)).thenReturn(ticket);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(VEHICLE_REG_NUMBER);
 
-        when(inputReaderUtil.readSelection()).thenReturn(1);
+        doReturn(true).when(ticketDAO).updateTicket(any(Ticket.class));
 
-        ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+        parkingService.processExitingVehicle();
 
-        assertNotNull(parkingSpot);
-        assertEquals(1, parkingSpot.getId());
+        verify(ticketDAO, times(1)).updateTicket(ticket);
 
-        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
-        verify(inputReaderUtil, times(1)).readSelection();
-    }
-
-    @Test
-    void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
-
-        ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-        assertNull(parkingSpot, "La place de parking doit être nulle car aucune place n'est disponible");
-    }
-
-    @Test
-    void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
-
-        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);
-
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-
-        ParkingSpot result = parkingService.getNextParkingNumberIfAvailable();
-        assertNull(result, "le résultat doit être nulle");
-
-        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
     }
 }

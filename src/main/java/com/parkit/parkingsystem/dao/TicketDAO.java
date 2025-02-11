@@ -130,7 +130,7 @@ public class TicketDAO {
                 ps.setString(1, vehicleRegNumber);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        count = rs.getInt(1);
+                        ticketCount = rs.getInt(1);
                     }
                 }
             }

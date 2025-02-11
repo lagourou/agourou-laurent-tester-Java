@@ -100,7 +100,7 @@ public class ParkingService {
         }
     }
 
-    public String getVehichleRegNumber() throws Exception {
+    public String getVehichleRegNumber() {
         logger.info("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
@@ -149,26 +149,29 @@ public class ParkingService {
             String exitingVehicleRegNumber = inputReaderUtil.readVehicleRegistrationNumber();
             Ticket ticket = ticketDAO.getTicket(exitingVehicleRegNumber);
             int ticketCount = ticketDAO.getNbTicket(exitingVehicleRegNumber);
-            Date outTime = new Date();
 
-            ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket, false);
-
-            if (ticketDAO.updateTicket(ticket) && ticketCount > 0) {
-
+            boolean isUpdated = false;
+            if (ticket != null) {
+                Date outTime = new Date();
+                ticket.setOutTime(outTime);
+                fareCalculatorService.calculateFare(ticket, false);
+                isUpdated = ticketDAO.updateTicket(ticket);
+            }
+            if (isUpdated && ticketCount != 0) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
-                parkingSpotDAO.updateParking(parkingSpot);
                 parkingSpot.setAvailable(true);
+                parkingSpotDAO.updateParking(parkingSpot);
 
                 logger.info("Please park your vehicle in spot number: {}", parkingSpot.getId());
                 logger.info("Please pay the parking fare: {}", ticket.getPrice());
+                Date outTime = ticket.getOutTime();
                 logger.info("Recorded out-time for vehicle number: {} is: {}", ticket.getVehicleRegNumber(), outTime);
             } else {
                 logger.info("Unable to update ticket information. Error occurred");
+                logger.info("Ticket not found for vehicle number: {}", exitingVehicleRegNumber);
             }
         } catch (Exception e) {
             logger.error("Unable to process exiting vehicle", e);
         }
     }
-
 }
