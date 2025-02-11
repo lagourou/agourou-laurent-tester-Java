@@ -149,10 +149,11 @@ public class ParkingService {
             String exitingVehicleRegNumber = inputReaderUtil.readVehicleRegistrationNumber();
             Ticket ticket = ticketDAO.getTicket(exitingVehicleRegNumber);
             int ticketCount = ticketDAO.getNbTicket(exitingVehicleRegNumber);
+            Date outTime = null;
 
             boolean isUpdated = false;
             if (ticket != null) {
-                Date outTime = new Date();
+                outTime = new Date();
                 ticket.setOutTime(outTime);
                 fareCalculatorService.calculateFare(ticket, false);
                 isUpdated = ticketDAO.updateTicket(ticket);
@@ -164,7 +165,6 @@ public class ParkingService {
 
                 logger.info("Please park your vehicle in spot number: {}", parkingSpot.getId());
                 logger.info("Please pay the parking fare: {}", ticket.getPrice());
-                Date outTime = ticket.getOutTime();
                 logger.info("Recorded out-time for vehicle number: {} is: {}", ticket.getVehicleRegNumber(), outTime);
             } else {
                 logger.info("Unable to update ticket information. Error occurred");
