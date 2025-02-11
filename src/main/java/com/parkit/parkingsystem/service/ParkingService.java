@@ -16,6 +16,7 @@ public class ParkingService {
     private static final Logger logger = LogManager.getLogger("ParkingService");
 
     private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
+    private static final String VEHICLE_REG_NUMBER = "ABCDEF";
 
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
@@ -61,8 +62,8 @@ public class ParkingService {
         try {
             ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
             String incomingVehicleRegNumber = inputReaderUtil.readVehicleRegistrationNumber();
-            Ticket ticket = ticketDAO.getTicket(incomingVehicleRegNumber);
-            int nbTicket = ticketDAO.getNbTicket(incomingVehicleRegNumber);
+            Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
+            int nbTicket = ticketDAO.getNbTicket(VEHICLE_REG_NUMBER);
             boolean ticketDiscount = nbTicket > 0;
 
             if (parkingSpot != null && parkingSpot.getId() > 0) {
@@ -82,7 +83,7 @@ public class ParkingService {
 
                     logger.info("Generated Ticket and saved in DB");
                     logger.info("Please park your vehicle in spot number: {}", parkingSpot.getId());
-                    logger.info("Recorded in-time for vehicle number: {} is: {}", incomingVehicleRegNumber, inTime);
+                    logger.info("Recorded in-time for vehicle number: {} is: {}", VEHICLE_REG_NUMBER, inTime);
 
                 }
             }
