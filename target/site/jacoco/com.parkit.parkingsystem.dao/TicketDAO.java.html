@@ -40,7 +40,7 @@ import java.sql.Timestamp;
         try {
 <span class="nc" id="L41">            con = dataBaseConfig.getConnection();</span>
 <span class="nc" id="L42">            ps = con.prepareStatement(</span>
-                    &quot;INSERT INTO ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) VALUES (?, ?, ?, ?, ?)&quot;);
+<span class="nc" id="L43">                    &quot;INSERT INTO ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) VALUES (?, ?, ?, ?, ?)&quot;);</span>
 <span class="nc" id="L44">            ps.setInt(1, ticket.getParkingSpot().getId());</span>
 <span class="nc" id="L45">            ps.setString(2, ticket.getVehicleRegNumber());</span>
 <span class="nc" id="L46">            ps.setDouble(3, ticket.getPrice());</span>
@@ -70,13 +70,13 @@ import java.sql.Timestamp;
 <span class="nc bnc" id="L70" title="All 2 branches missed.">            if (rowsAffected &gt; 0) {</span>
 <span class="nc" id="L71">                logger.info(&quot;Ticket inséré avec succès pour le véhicule {}&quot;, ticket.getVehicleRegNumber());</span>
 <span class="nc" id="L72">                logger.info(&quot;Ticket inséré avec succès pour le véhicule {}&quot;, ticket.getVehicleRegNumber());</span>
-            } else {
+<span class="nc" id="L73">            } else {</span>
 <span class="nc" id="L74">                logger.error(&quot;Échec de l'insertion du ticket pour le véhicule {}&quot;, ticket.getVehicleRegNumber());</span>
 <span class="nc" id="L75">                return false;</span>
             }
-<span class="nc bnc" id="L77" title="All 4 branches missed.">        } catch (SQLException ex) {</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        } catch (SQLException ex) {</span>
 <span class="nc" id="L78">            logger.error(&quot;Erreur lors de l'insertion du ticket&quot;, ex);</span>
-<span class="nc" id="L79">        }</span>
+        }
 <span class="nc" id="L80">        return false;</span>
     }
 
@@ -99,7 +99,7 @@ import java.sql.Timestamp;
 <span class="nc" id="L99">                ParkingSpot parkingSpot = new ParkingSpot(</span>
 <span class="nc" id="L100">                        rs.getInt(&quot;PARKING_NUMBER&quot;),</span>
 <span class="nc" id="L101">                        ParkingType.valueOf(rs.getString(&quot;TYPE&quot;)),</span>
-                        false);
+<span class="nc" id="L102">                        false);</span>
 
 <span class="nc" id="L104">                ticket.setId(rs.getInt(&quot;ID&quot;));</span>
 <span class="nc" id="L105">                ticket.setVehicleRegNumber(rs.getString(&quot;VEHICLE_REG_NUMBER&quot;));</span>
@@ -159,7 +159,7 @@ import java.sql.Timestamp;
 <span class="nc" id="L159">                    logger.error(&quot;Erreur lors de la mise à jour du ticket avec l'ID {}&quot;, ticket.getId());</span>
 <span class="nc" id="L160">                    return false;</span>
                 }
-<span class="nc bnc" id="L162" title="All 2 branches missed.">            }</span>
+            }
         } finally {
 <span class="nc" id="L164">            dataBaseConfig.closeConnection(con);</span>
         }

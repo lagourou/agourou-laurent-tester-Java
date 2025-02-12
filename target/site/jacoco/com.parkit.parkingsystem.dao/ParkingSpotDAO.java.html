@@ -37,7 +37,7 @@ import java.sql.SQLException;
             }
 <span class="nc" id="L38">        } catch (Exception ex) {</span>
 <span class="nc" id="L39">            logger.error(&quot;Error fetching next available slot&quot;, ex);</span>
-<span class="nc" id="L40">        }</span>
+        }
 <span class="nc" id="L41">        return result;</span>
     }
 
@@ -79,7 +79,7 @@ import java.sql.SQLException;
             }
 <span class="nc" id="L80">        } catch (SQLException e) {</span>
 <span class="nc" id="L81">            logger.error(&quot;Error fetching parking spot&quot;, e);</span>
-<span class="nc" id="L82">        }</span>
+        }
 <span class="nc" id="L83">        return parkingSpot;</span>
     }
 }

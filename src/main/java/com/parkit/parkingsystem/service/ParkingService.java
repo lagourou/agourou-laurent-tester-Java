@@ -21,35 +21,6 @@ public class ParkingService {
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private TicketDAO ticketDAO;
-    private int count;
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    private String vehicleRegNumber;
-
-    public String getVehicleRegNumber() {
-        return vehicleRegNumber;
-    }
-
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        this.vehicleRegNumber = vehicleRegNumber;
-    }
-
-    private boolean discount;
-
-    public boolean discount() {
-        return discount;
-    }
-
-    public void getDiscount(boolean discount) {
-        this.discount = discount;
-    }
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
         this.inputReaderUtil = inputReaderUtil;

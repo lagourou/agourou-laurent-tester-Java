@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -32,7 +33,10 @@ class ParkingServiceTest {
     @Mock
     private TicketDAO ticketDAO;
     @Mock
+    private Logger logger;
+    @Mock
     private FareCalculatorService fareCalculatorService;
+
     @InjectMocks
     private ParkingService parkingService;
 
@@ -45,6 +49,7 @@ class ParkingServiceTest {
         MockitoAnnotations.openMocks(this);
 
         parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         ticket = new Ticket();
 
         ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
@@ -70,6 +75,16 @@ class ParkingServiceTest {
     }
 
     @Test
+    void testGetVehichleRegNumber() {
+
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(VEHICLE_REG_NUMBER);
+
+        assertEquals(VEHICLE_REG_NUMBER, parkingService.getVehichleRegNumber());
+
+        verify(inputReaderUtil, times(1)).readVehicleRegistrationNumber();
+    }
+
+    @Test
     void testGetNextParkingNumberIfAvailable() {
 
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
@@ -86,10 +101,29 @@ class ParkingServiceTest {
     }
 
     @Test
+    void testGetNextParkingNumberIfAvailableException() {
+
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR))
+                .thenThrow(new RuntimeException("Error fetching next available parking slot"));
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+
+        parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+        assertNull(parkingSpot, "La place de parking doit être nulle car une exception a été lancée");
+
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
+    }
+
+    @Test
     void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
 
         parkingSpot = parkingService.getNextParkingNumberIfAvailable();
         assertNull(parkingSpot, "La place de parking doit être nulle car aucune place n'est disponible");
+
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
     }
 
     @Test
@@ -103,6 +137,28 @@ class ParkingServiceTest {
         assertNull(result, "le résultat doit être nulle");
 
         verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
+    }
+
+    @Test
+    void testgetVehichleTypeCar() {
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+
+        ParkingType parkingType = parkingService.getVehichleType();
+
+        assertEquals(ParkingType.CAR, parkingType);
+
+        verify(inputReaderUtil, times(1)).readSelection();
+    }
+
+    @Test
+    void testgetVehichleTypeBike() {
+        when(inputReaderUtil.readSelection()).thenReturn(2);
+
+        ParkingType parkingType = parkingService.getVehichleType();
+
+        assertEquals(ParkingType.BIKE, parkingType);
+
+        verify(inputReaderUtil, times(1)).readSelection();
     }
 
     @Test
