@@ -5,6 +5,7 @@ import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,9 +26,34 @@ class FareCalculatorServiceTest {
 
     @BeforeEach
     private void setUpPerTest() {
+
+        fareCalculatorService = new FareCalculatorService();
         ticket = new Ticket();
     }
+    @Test
+    void calculateFareCarTest() {
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setInTime(new Date());
+        ticket.setOutTime(new Date(System.currentTimeMillis() + (60 * 60 * 1000)));
 
+        fareCalculatorService.calculateFare(ticket);
+
+        double expectedFare = 1 * Fare.CAR_RATE_PER_HOUR;
+        assertEquals(expectedFare, ticket.getPrice());
+    }
+    @Test
+    void calculateFareBikeTest() {
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setInTime(new Date());
+        ticket.setOutTime(new Date(System.currentTimeMillis() + (60 * 60 * 1000)));
+
+        fareCalculatorService.calculateFare(ticket);
+
+        double expectedFare = 1 * Fare.BIKE_RATE_PER_HOUR;
+        assertEquals(expectedFare, ticket.getPrice());
+    }
     @Test
     void calculateFareCar() {
         Date inTime = new Date();
@@ -66,7 +92,10 @@ class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-        assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket, false));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+        fareCalculatorService.calculateFare(ticket, false);}); 
+
     }
 
     @Test
@@ -79,7 +108,8 @@ class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-        assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket, false));
+        assertThrows(IllegalArgumentException.class, () -> { 
+        fareCalculatorService.calculateFare(ticket, false);});
     }
 
     @Test

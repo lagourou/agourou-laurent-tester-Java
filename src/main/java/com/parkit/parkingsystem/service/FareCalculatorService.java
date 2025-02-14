@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
@@ -27,29 +28,28 @@ public class FareCalculatorService {
             ticket.setPrice(0);
             return;
         }
+        ParkingType parkingType = ticket.getParkingSpot().getParkingType();
+        if (parkingType == null) {
+            throw new IllegalArgumentException("Parking type is unknown");
+        }
         double rate;
-
         switch (ticket.getParkingSpot().getParkingType()) {
-            case CAR: {
+            case CAR ->  {
                 rate = Fare.CAR_RATE_PER_HOUR;
                 ticket.setPrice(hours * rate);
-                break;
             }
-            case BIKE: {
+            case BIKE ->  {
                 rate = Fare.BIKE_RATE_PER_HOUR;
                 ticket.setPrice(hours * rate);
-                break;
             }
-            default:
-                throw new IllegalArgumentException("Unkown Parking Type");
         }
         if (discount) {
             ticket.setPrice(ticket.getPrice() * 0.95);
         }
     }
-
     public void calculateFare(Ticket ticket) {
         calculateFare(ticket, false);
     }
+
 
 }

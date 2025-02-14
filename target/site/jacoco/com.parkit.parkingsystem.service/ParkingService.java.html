@@ -15,12 +15,12 @@ public class ParkingService {
 
 <span class="fc" id="L16">    private static final Logger logger = LogManager.getLogger(&quot;ParkingService&quot;);</span>
 
-<span class="fc" id="L18">    private static FareCalculatorService fareCalculatorService = new FareCalculatorService();</span>
+<span class="fc" id="L18">    private static final FareCalculatorService fareCalculatorService = new FareCalculatorService();</span>
 <span class="fc" id="L19">    private static final String VEHICLE_REG_NUMBER = &quot;ABCDEF&quot;;</span>
 
-    private InputReaderUtil inputReaderUtil;
-    private ParkingSpotDAO parkingSpotDAO;
-    private TicketDAO ticketDAO;
+    private final InputReaderUtil inputReaderUtil;
+    private final ParkingSpotDAO parkingSpotDAO;
+    private final TicketDAO ticketDAO;
 
 <span class="fc" id="L25">    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {</span>
 <span class="fc" id="L26">        this.inputReaderUtil = inputReaderUtil;</span>
@@ -35,15 +35,15 @@ public class ParkingService {
 <span class="fc" id="L35">            String incomingVehicleRegNumber = inputReaderUtil.readVehicleRegistrationNumber();</span>
 <span class="fc" id="L36">            Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);</span>
 <span class="fc" id="L37">            int nbTicket = ticketDAO.getNbTicket(VEHICLE_REG_NUMBER);</span>
-<span class="fc bfc" id="L38" title="All 2 branches covered.">            boolean ticketDiscount = nbTicket &gt; 0;</span>
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">            boolean ticketDiscount = nbTicket &gt; 0;</span>
 
-<span class="pc bpc" id="L40" title="1 of 4 branches missed.">            if (parkingSpot != null &amp;&amp; parkingSpot.getId() &gt; 0) {</span>
+<span class="pc bpc" id="L40" title="2 of 4 branches missed.">            if (parkingSpot != null &amp;&amp; parkingSpot.getId() &gt; 0) {</span>
 <span class="fc" id="L41">                parkingSpot.setAvailable(false);</span>
 <span class="fc" id="L42">                parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as</span>
                                                           // false
 
 <span class="fc" id="L45">                Date inTime = new Date();</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">                if (ticket == null) {</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">                if (ticket == null) {</span>
 
 <span class="fc" id="L48">                    ticket = new Ticket();</span>
 <span class="fc" id="L49">                    ticket.setParkingSpot(parkingSpot);</span>
@@ -58,7 +58,7 @@ public class ParkingService {
 
                 }
             }
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            if (ticketDiscount) {</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (ticketDiscount) {</span>
 
 <span class="nc" id="L63">                fareCalculatorService.calculateFare(ticket, true);</span>
 <span class="nc" id="L64">                logger.info(&quot;Glad to see you again&quot;);</span>
@@ -89,8 +89,8 @@ public class ParkingService {
 <span class="fc" id="L89">            } else {</span>
 <span class="fc" id="L90">                logger.error(&quot;Error fetching parking number from DB. Parking slots might be full&quot;);</span>
             }
-<span class="fc" id="L92">        } catch (IllegalArgumentException ie) {</span>
-<span class="fc" id="L93">            logger.error(&quot;Error parsing user input for type of vehicle&quot;, ie);</span>
+<span class="pc" id="L92">        } catch (IllegalArgumentException ie) {</span>
+<span class="nc" id="L93">            logger.error(&quot;Error parsing user input for type of vehicle&quot;, ie);</span>
 <span class="fc" id="L94">        } catch (Exception e) {</span>
 <span class="fc" id="L95">            logger.error(&quot;Error fetching next available parking slot&quot;, e);</span>
         }
@@ -102,7 +102,7 @@ public class ParkingService {
 <span class="fc" id="L102">        logger.info(&quot;1 CAR&quot;);</span>
 <span class="fc" id="L103">        logger.info(&quot;2 BIKE&quot;);</span>
 <span class="fc" id="L104">        int input = inputReaderUtil.readSelection();</span>
-<span class="fc bfc" id="L105" title="All 3 branches covered.">        switch (input) {</span>
+<span class="pc bpc" id="L105" title="1 of 3 branches missed.">        switch (input) {</span>
             case 1: {
 <span class="fc" id="L107">                return ParkingType.CAR;</span>
             }
@@ -110,8 +110,8 @@ public class ParkingService {
 <span class="fc" id="L110">                return ParkingType.BIKE;</span>
             }
             default: {
-<span class="fc" id="L113">                logger.info(&quot;Incorrect input provided&quot;);</span>
-<span class="fc" id="L114">                throw new IllegalArgumentException(&quot;Entered input is invalid&quot;);</span>
+<span class="nc" id="L113">                logger.info(&quot;Incorrect input provided&quot;);</span>
+<span class="nc" id="L114">                throw new IllegalArgumentException(&quot;Entered input is invalid&quot;);</span>
             }
         }
     }

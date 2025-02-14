@@ -1,5 +1,25 @@
 package com.parkit.parkingsystem;
 
+import java.sql.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -7,21 +27,6 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import com.parkit.parkingsystem.service.FareCalculatorService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
-import java.sql.Date;
 
 @ExtendWith(MockitoExtension.class)
 class ParkingServiceTest {
@@ -32,10 +37,6 @@ class ParkingServiceTest {
     private ParkingSpotDAO parkingSpotDAO;
     @Mock
     private TicketDAO ticketDAO;
-    @Mock
-    private Logger logger;
-    @Mock
-    private FareCalculatorService fareCalculatorService;
 
     @InjectMocks
     private ParkingService parkingService;
@@ -45,7 +46,7 @@ class ParkingServiceTest {
     private Ticket ticket;
 
     @BeforeEach
-    private void setUpPerTest() {
+    public void setUpPerTest() {
         MockitoAnnotations.openMocks(this);
 
         parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
