@@ -19,7 +19,7 @@ public class TicketDAO {
 
     private static final Logger logger = LogManager.getLogger("TicketDAO");
 
-    protected DataBaseConfig dataBaseConfig = new DataBaseConfig();
+    public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     private int count;
 
@@ -44,7 +44,7 @@ public class TicketDAO {
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : new Timestamp(ticket.getOutTime().getTime()));
             return ps.execute();
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             return false;
         } finally {
             dataBaseConfig.closePreparedStatement(ps);
@@ -130,7 +130,7 @@ public class TicketDAO {
                     }
                 }
             }
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             logger.error("Counting error", ex);
         } finally {
             dataBaseConfig.closeConnection(con);

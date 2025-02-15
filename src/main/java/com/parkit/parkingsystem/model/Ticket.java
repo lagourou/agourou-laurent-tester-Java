@@ -66,4 +66,8 @@ public class Ticket {
     public Ticket saveTicket(Ticket ticket) {
         throw new UnsupportedOperationException("Unimplemented method 'saveTicket'");
     }
+
+    public Object getNbTicket() {
+        throw new UnsupportedOperationException("Unimplemented method 'getNbTicket'");
+    }
 }

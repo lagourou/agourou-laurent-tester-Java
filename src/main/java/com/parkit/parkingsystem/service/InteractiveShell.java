@@ -8,11 +8,10 @@ import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
 
-    private InteractiveShell() {
-        // private constructor to hide the implicit public one
+    public InteractiveShell() {
     }
 
-    private static final Logger logger = LogManager.getLogger("InteractiveShell");
+    static final Logger logger = LogManager.getLogger("InteractiveShell");
 
     public static void loadInterface() {
         logger.info("App initialized!!!");
@@ -47,7 +46,7 @@ public class InteractiveShell {
         }
     }
 
-    private static void loadMenu() {
+    public static void loadMenu() {
         logger.info("Please select an option. Simply enter the number to choose an action");
         logger.info("1 New Vehicle Entering - Allocate Parking Space");
         logger.info("2 Vehicle Exiting - Generate Ticket Price");

@@ -76,41 +76,46 @@ class ParkingDataBaseIT {
     }
 
     @Test
-    void testParkingACar() throws Exception {
-        ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
+void testParkingACar() throws Exception {
+    ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
+    assertNotNull(parkingSpot, "La place de parking ne doit pas être nulle");
 
-        assertNotNull(parkingSpot, "La place de parking ne doit pas être nulle");
+    Ticket ticket = new Ticket();
+    ticket.setParkingSpot(parkingSpot);
+    ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
+    ticket.setPrice(10.0);
+    ticket.setInTime(new Timestamp(System.currentTimeMillis()));
+    ticketDAO.saveTicket(ticket);
 
-        Ticket ticket = new Ticket();
-        ticket.setParkingSpot(parkingSpot);
-        ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
-        ticket.setPrice(10.0);
-        ticket.setInTime(new Timestamp(System.currentTimeMillis()));
-        ticketDAO.saveTicket(ticket);
+    Ticket fetchedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
+    assertNotNull(fetchedTicket, "Le ticket ne doit pas être nul après l'insertion dans la base de données");
 
-        Ticket fetchedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
-        assertNotNull(fetchedTicket, "Le ticket ne doit pas être nul après l'insertion dans la base de données");
+    System.out.println("Fetched Ticket: " + fetchedTicket);
+    System.out.println("Parking Spot: " + parkingSpot);
+}
 
-    }
+@Test
+void testParkingLotExit() throws Exception {
+    ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
+    Ticket ticket = new Ticket();
+    ticket.setParkingSpot(parkingSpot);
+    ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
+    ticket.setPrice(10.0);
+    ticket.setInTime(new Timestamp(System.currentTimeMillis()));
+    ticketDAO.saveTicket(ticket);
 
-    @Test
-    void testParkingLotExit() throws Exception {
-        ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
-        Ticket ticket = new Ticket();
-        ticket.setParkingSpot(parkingSpot);
-        ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
-        ticket.setPrice(10.0);
-        ticket.setInTime(new Timestamp(System.currentTimeMillis()));
-        ticketDAO.saveTicket(ticket);
+    Ticket fetchedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
+    assertNotNull(fetchedTicket, "Le ticket ne doit pas être nul après l'insertion dans la base de données");
 
-        Ticket fetchedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
-        assertNotNull(fetchedTicket, "Le ticket ne doit pas être nul après l'insertion dans la base de données");
+    fetchedTicket.setOutTime(new Timestamp(System.currentTimeMillis()));
+    ticketDAO.updateTicket(fetchedTicket);
 
-        fetchedTicket.setOutTime(new Timestamp(System.currentTimeMillis()));
-        ticketDAO.updateTicket(fetchedTicket);
+    Ticket updatedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
+    assertNotNull(updatedTicket, "Le ticket ne doit toujours pas être nul après la mise à jour");
 
-        Ticket updatedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
-        assertNotNull(updatedTicket, "Le ticket ne doit toujours pas être nul après la mise à jour");
-    }
+    System.out.println("Updated Ticket: " + updatedTicket);
+    System.out.println("Parking Spot: " + parkingSpot);
+}
+
 
 }

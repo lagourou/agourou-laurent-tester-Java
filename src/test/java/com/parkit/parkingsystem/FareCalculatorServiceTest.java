@@ -40,7 +40,7 @@ class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
 
         double expectedFare = 1 * Fare.CAR_RATE_PER_HOUR;
-        assertEquals(expectedFare, ticket.getPrice());
+        assertEquals(expectedFare, ticket.getPrice(), 0.001, "Le tarif calculé est incorrect");
     }
     @Test
     void calculateFareBikeTest() {
@@ -52,7 +52,7 @@ class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
 
         double expectedFare = 1 * Fare.BIKE_RATE_PER_HOUR;
-        assertEquals(expectedFare, ticket.getPrice());
+        assertEquals(expectedFare, ticket.getPrice(), 0.001, "Le tarif calculé est incorrect");
     }
     @Test
     void calculateFareCar() {

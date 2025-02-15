@@ -19,7 +19,7 @@ import com.parkit.parkingsystem.model.Ticket;
 
 <span class="fc" id="L20">    private static final Logger logger = LogManager.getLogger(&quot;TicketDAO&quot;);</span>
 
-<span class="nc" id="L22">    protected DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
+<span class="nc" id="L22">    public DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
 
     private int count;
 
@@ -44,7 +44,7 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="nc" id="L44">            ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));</span>
 <span class="nc bnc" id="L45" title="All 2 branches missed.">            ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : new Timestamp(ticket.getOutTime().getTime()));</span>
 <span class="nc" id="L46">            return ps.execute();</span>
-<span class="nc" id="L47">        } catch (Exception ex) {</span>
+<span class="nc" id="L47">        } catch (ClassNotFoundException | SQLException ex) {</span>
 <span class="nc" id="L48">            return false;</span>
         } finally {
 <span class="nc" id="L50">            dataBaseConfig.closePreparedStatement(ps);</span>
@@ -130,7 +130,7 @@ import com.parkit.parkingsystem.model.Ticket;
                     }
                 }
             }
-<span class="nc" id="L133">        } catch (Exception ex) {</span>
+<span class="nc" id="L133">        } catch (ClassNotFoundException | SQLException ex) {</span>
 <span class="nc" id="L134">            logger.error(&quot;Counting error&quot;, ex);</span>
         } finally {
 <span class="nc" id="L136">            dataBaseConfig.closeConnection(con);</span>

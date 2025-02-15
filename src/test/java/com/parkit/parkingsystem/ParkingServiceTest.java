@@ -9,8 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -25,10 +27,14 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.service.FareCalculatorService;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
+
 @ExtendWith(MockitoExtension.class)
+
+
 class ParkingServiceTest {
 
     @Mock
@@ -37,6 +43,8 @@ class ParkingServiceTest {
     private ParkingSpotDAO parkingSpotDAO;
     @Mock
     private TicketDAO ticketDAO;
+    @Mock
+    private FareCalculatorService fareCalculatorService;
 
     @InjectMocks
     private ParkingService parkingService;
@@ -74,7 +82,63 @@ class ParkingServiceTest {
         verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
         verify(parkingSpotDAO, times(1)).getNextParkingSpot(ParkingType.CAR);
     }
+    @Test
+    void testProcessIncomingVehicle_WithDiscount() throws Exception {
 
+        Ticket mockTicket = new Ticket();
+        mockTicket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
+        mockTicket.setInTime(new Date(0));
+    
+        when(ticketDAO.getTicket(VEHICLE_REG_NUMBER)).thenReturn(mockTicket);
+        when(ticketDAO.getNbTicket(VEHICLE_REG_NUMBER)).thenReturn(1);
+        doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class), eq(true));
+    
+        parkingService.setFareCalculatorService(fareCalculatorService);
+    
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(VEHICLE_REG_NUMBER);
+    
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
+        when(parkingSpotDAO.getNextParkingSpot(ParkingType.CAR)).thenReturn(parkingSpot);
+    
+        parkingService.processIncomingVehicle();
+    
+        verify(ticketDAO, times(0)).saveTicket(any(Ticket.class));
+        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
+    
+        assertNotNull(mockTicket.getInTime(), "Ticket should have a valid in-time");
+        assertEquals(VEHICLE_REG_NUMBER, mockTicket.getVehicleRegNumber(), "Vehicle registration number should match");
+
+        verify(fareCalculatorService, times(1)).calculateFare(any(Ticket.class), eq(true));
+    }
+    @Test
+    void testProcessIncomingVehicle_WithoutDiscount() throws Exception {
+
+        Ticket mockTicket = new Ticket();
+        mockTicket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
+        mockTicket.setInTime(new Date(0));
+    
+        when(ticketDAO.getTicket(VEHICLE_REG_NUMBER)).thenReturn(mockTicket);
+        when(ticketDAO.getNbTicket(VEHICLE_REG_NUMBER)).thenReturn(0);
+        doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class), eq(false));
+    
+        parkingService.setFareCalculatorService(fareCalculatorService);
+    
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(VEHICLE_REG_NUMBER);
+    
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
+        when(parkingSpotDAO.getNextParkingSpot(ParkingType.CAR)).thenReturn(parkingSpot);
+    
+        parkingService.processIncomingVehicle();
+    
+        verify(ticketDAO, times(0)).saveTicket(any(Ticket.class));
+        verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
+    
+        assertNotNull(mockTicket.getInTime(), "Ticket should have a valid in-time");
+        assertEquals(VEHICLE_REG_NUMBER, mockTicket.getVehicleRegNumber(), "Vehicle registration number should match");
+
+        verify(fareCalculatorService, times(1)).calculateFare(any(Ticket.class), eq(false));
+    }
+    
     @Test
     void testGetVehichleRegNumber() {
 
@@ -83,6 +147,7 @@ class ParkingServiceTest {
         assertEquals(VEHICLE_REG_NUMBER, parkingService.getVehichleRegNumber());
 
         verify(inputReaderUtil, times(1)).readVehicleRegistrationNumber();
+        
     }
 
     @Test
@@ -100,21 +165,29 @@ class ParkingServiceTest {
         verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
         verify(inputReaderUtil, times(1)).readSelection();
     }
-
     @Test
     void testGetNextParkingNumberIfAvailableException() {
+        InputReaderUtil mockInputReader = mock(InputReaderUtil.class);
 
-        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR))
-                .thenThrow(new RuntimeException("Error fetching next available parking slot"));
+        when(mockInputReader.readSelection()).thenReturn(3);
 
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-
+        ParkingSpotDAO mockParkingSpotDAO = mock(ParkingSpotDAO.class);
+        TicketDAO mockTicketDAO = mock(TicketDAO.class);
+        when(mockParkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1); // Retourne un parking valide
+        
+        parkingService = new ParkingService(mockInputReader, mockParkingSpotDAO, mockTicketDAO);
         parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-        assertNull(parkingSpot, "La place de parking doit être nulle car une exception a été lancée");
+        
+        assertNull(parkingSpot, "La place de parking doit être nulle après une IllegalArgumentException");
+        when(mockInputReader.readSelection()).thenReturn(1); // Voiture valide
+        when(mockParkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenThrow
+        (new RuntimeException("Error fetching next available parking slot"));
+        
+        parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 
-        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
+        assertNull(parkingSpot, "La place de parking doit être nulle après une RuntimeException");
     }
-
+    
     @Test
     void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);
