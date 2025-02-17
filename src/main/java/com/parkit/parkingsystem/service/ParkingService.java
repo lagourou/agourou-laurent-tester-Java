@@ -59,16 +59,7 @@ public void processIncomingVehicle() {
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number: " + parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+ VEHICLE_REG_NUMBER +" is:" + inTime);
-            } else {
-                // Si le ticket existe déjà, on vérifie si "inTime" est null et on l'affecte
-                if (ticket.getInTime() == null) {
-                    ticket.setInTime(new Date());  // On affecte un "inTime" si nécessaire
-                    System.out.println("Updated in-time for existing ticket:" + ticket.getInTime());
-                }
-                System.out.println("Existing ticket found for vehicle:" + VEHICLE_REG_NUMBER);
             }
-
-            // Log the decision to apply discount
             if (ticketDiscount) {
                 System.out.println("Applying discount for vehicle:" + VEHICLE_REG_NUMBER);
                 fareCalculatorService.calculateFare(ticket, true);
@@ -148,9 +139,6 @@ public void processIncomingVehicle() {
                 System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
                 System.out.println("Please pay the parking fare:" + ticket.getPrice());
                 System.out.println("Recorded out-time for vehicle number:" +  "is" + ticket.getVehicleRegNumber() + outTime);
-            } else {
-                System.out.println("Unable to update ticket information. Error occurred");
-                System.out.println("Ticket not found for vehicle number:" + exitingVehicleRegNumber);
             }
         } catch (Exception e) {
             logger.error("Unable to process exiting vehicle", e);

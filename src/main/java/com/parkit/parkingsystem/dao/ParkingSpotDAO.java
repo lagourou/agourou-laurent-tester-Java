@@ -4,7 +4,6 @@ import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
@@ -13,7 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ParkingSpotDAO {
-    private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
+    public Logger logger;
+    
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
 
     protected DataBaseConfig dataBaseConfig = new DataBaseConfig();
 

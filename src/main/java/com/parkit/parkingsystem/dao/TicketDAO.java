@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
@@ -16,16 +15,13 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class TicketDAO {
-
-    private static final Logger logger = LogManager.getLogger("TicketDAO");
+    private Logger logger;
+    
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
-
-    private int count;
-
-    public int getCount() {
-        return count;
-    }
 
     public void setDataBaseConfig(DataBaseConfig dataBaseConfig) {
         this.dataBaseConfig = dataBaseConfig;
@@ -43,7 +39,10 @@ public class TicketDAO {
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : new Timestamp(ticket.getOutTime().getTime()));
-            return ps.execute();
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
         } catch (ClassNotFoundException | SQLException ex) {
             return false;
         } finally {
@@ -65,7 +64,7 @@ public class TicketDAO {
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 logger.info("Ticket inséré avec succès pour le véhicule {}", ticket.getVehicleRegNumber());
-                logger.info("Ticket inséré avec succès pour le véhicule {}", ticket.getVehicleRegNumber());
+                return true;
             } else {
                 logger.error("Échec de l'insertion du ticket pour le véhicule {}", ticket.getVehicleRegNumber());
                 return false;
@@ -149,7 +148,7 @@ public class TicketDAO {
 
                 int updateRowCount = ps.executeUpdate();
                 if (updateRowCount > 0) {
-                    logger.info("Ticket avec l'ID {} mis à jour avec succès", ticket.getId());
+                    logger.info("Ticket avec l'ID mis à jour avec succès {}", ticket.getId());
                     return true;
                 } else {
                     logger.error("Erreur lors de la mise à jour du ticket avec l'ID {}", ticket.getId());
