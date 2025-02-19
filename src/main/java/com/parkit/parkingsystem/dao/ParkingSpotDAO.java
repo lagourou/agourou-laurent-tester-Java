@@ -1,24 +1,18 @@
 package com.parkit.parkingsystem.dao;
 
-import com.parkit.parkingsystem.config.DataBaseConfig;
-import com.parkit.parkingsystem.constants.DBConstants;
-import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.model.ParkingSpot;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ParkingSpotDAO {
-    public Logger logger;
-    
-    public void setLogger(Logger logger) {
-        this.logger = logger;
-    }
+import com.parkit.parkingsystem.config.DataBaseConfig;
+import com.parkit.parkingsystem.constants.DBConstants;
+import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.model.ParkingSpot;
 
-    protected DataBaseConfig dataBaseConfig = new DataBaseConfig();
+public class ParkingSpotDAO {
+
+    public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public void save(ParkingSpot parkingSpot) {
         // Implementation to save the parking spot to the database
@@ -39,7 +33,8 @@ public class ParkingSpotDAO {
                 }
             }
         } catch (Exception ex) {
-            logger.error("Error fetching next available slot", ex);
+            System.err.println("Error fetching next available slot");
+            ex.printStackTrace();
         }
         return result;
     }
@@ -53,7 +48,7 @@ public class ParkingSpotDAO {
     }
 
     public boolean updateParking(ParkingSpot parkingSpot) {
-        // update the availability fo that parking slot
+        // update the availability of that parking slot
         try (Connection con = dataBaseConfig.getConnection();
                 PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT)) {
             ps.setBoolean(1, parkingSpot.isAvailable());
@@ -61,7 +56,8 @@ public class ParkingSpotDAO {
             int updateRowCount = ps.executeUpdate();
             return (updateRowCount == 1);
         } catch (Exception ex) {
-            logger.error("Error updating parking info", ex);
+            System.err.println("Error updating parking info");
+            ex.printStackTrace();
             return false;
         }
     }
@@ -81,7 +77,8 @@ public class ParkingSpotDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Error fetching parking spot", e);
+            System.err.println("Error fetching parking spot");
+            e.printStackTrace();
         }
         return parkingSpot;
     }

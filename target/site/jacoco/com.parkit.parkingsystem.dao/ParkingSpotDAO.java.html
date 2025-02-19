@@ -1,89 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ParkingSpotDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.dao</a> &gt; <span class="el_source">ParkingSpotDAO.java</span></div><h1>ParkingSpotDAO.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.dao;
 
-import com.parkit.parkingsystem.config.DataBaseConfig;
-import com.parkit.parkingsystem.constants.DBConstants;
-import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.model.ParkingSpot;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-<span class="fc" id="L14">public class ParkingSpotDAO {</span>
-    public Logger logger;
-    
-    public void setLogger(Logger logger) {
-<span class="fc" id="L18">        this.logger = logger;</span>
-<span class="fc" id="L19">    }</span>
+import com.parkit.parkingsystem.config.DataBaseConfig;
+import com.parkit.parkingsystem.constants.DBConstants;
+import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.model.ParkingSpot;
 
-<span class="fc" id="L21">    protected DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
+<span class="fc" id="L13">public class ParkingSpotDAO {</span>
+
+<span class="fc" id="L15">    public DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
 
     public void save(ParkingSpot parkingSpot) {
         // Implementation to save the parking spot to the database
-<span class="nc" id="L25">    }</span>
+<span class="nc" id="L19">    }</span>
 
     public void setDataBaseConfig(DataBaseConfig dataBaseConfig) {
-<span class="fc" id="L28">        this.dataBaseConfig = dataBaseConfig;</span>
-<span class="fc" id="L29">    }</span>
+<span class="fc" id="L22">        this.dataBaseConfig = dataBaseConfig;</span>
+<span class="fc" id="L23">    }</span>
 
     public int getNextAvailableSlot(ParkingType parkingType) {
-<span class="fc" id="L32">        int result = -1;</span>
-<span class="fc" id="L33">        try (Connection con = dataBaseConfig.getConnection();</span>
-<span class="fc" id="L34">                PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT)) {</span>
-<span class="fc" id="L35">            ps.setString(1, parkingType.toString());</span>
-<span class="fc" id="L36">            try (ResultSet rs = ps.executeQuery()) {</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">                if (rs.next()) {</span>
-<span class="fc" id="L38">                    result = rs.getInt(1);</span>
+<span class="fc" id="L26">        int result = -1;</span>
+<span class="fc" id="L27">        try (Connection con = dataBaseConfig.getConnection();</span>
+<span class="fc" id="L28">                PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT)) {</span>
+<span class="fc" id="L29">            ps.setString(1, parkingType.toString());</span>
+<span class="fc" id="L30">            try (ResultSet rs = ps.executeQuery()) {</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">                if (rs.next()) {</span>
+<span class="fc" id="L32">                    result = rs.getInt(1);</span>
                 }
             }
-<span class="fc" id="L41">        } catch (Exception ex) {</span>
-<span class="fc" id="L42">            logger.error(&quot;Error fetching next available slot&quot;, ex);</span>
+<span class="fc" id="L35">        } catch (Exception ex) {</span>
+<span class="fc" id="L36">            System.err.println(&quot;Error fetching next available slot&quot;);</span>
+<span class="fc" id="L37">            ex.printStackTrace();</span>
         }
-<span class="fc" id="L44">        return result;</span>
+<span class="fc" id="L39">        return result;</span>
     }
 
     public ParkingSpot getNextParkingSpot(ParkingType parkingType) {
-<span class="fc" id="L48">        int nextAvailableSlot = getNextAvailableSlot(parkingType);</span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (nextAvailableSlot &gt; 0) {</span>
-<span class="fc" id="L50">            return new ParkingSpot(nextAvailableSlot, parkingType, true);</span>
+<span class="fc" id="L43">        int nextAvailableSlot = getNextAvailableSlot(parkingType);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (nextAvailableSlot &gt; 0) {</span>
+<span class="fc" id="L45">            return new ParkingSpot(nextAvailableSlot, parkingType, true);</span>
         }
-<span class="fc" id="L52">        return null;</span>
+<span class="fc" id="L47">        return null;</span>
     }
 
     public boolean updateParking(ParkingSpot parkingSpot) {
-        // update the availability fo that parking slot
-<span class="fc" id="L57">        try (Connection con = dataBaseConfig.getConnection();</span>
-<span class="fc" id="L58">                PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT)) {</span>
-<span class="fc" id="L59">            ps.setBoolean(1, parkingSpot.isAvailable());</span>
-<span class="fc" id="L60">            ps.setInt(2, parkingSpot.getId());</span>
-<span class="fc" id="L61">            int updateRowCount = ps.executeUpdate();</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">            return (updateRowCount == 1);</span>
-<span class="fc" id="L63">        } catch (Exception ex) {</span>
-<span class="fc" id="L64">            logger.error(&quot;Error updating parking info&quot;, ex);</span>
-<span class="fc" id="L65">            return false;</span>
+        // update the availability of that parking slot
+<span class="fc" id="L52">        try (Connection con = dataBaseConfig.getConnection();</span>
+<span class="fc" id="L53">                PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT)) {</span>
+<span class="fc" id="L54">            ps.setBoolean(1, parkingSpot.isAvailable());</span>
+<span class="fc" id="L55">            ps.setInt(2, parkingSpot.getId());</span>
+<span class="fc" id="L56">            int updateRowCount = ps.executeUpdate();</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">            return (updateRowCount == 1);</span>
+<span class="fc" id="L58">        } catch (Exception ex) {</span>
+<span class="fc" id="L59">            System.err.println(&quot;Error updating parking info&quot;);</span>
+<span class="fc" id="L60">            ex.printStackTrace();</span>
+<span class="fc" id="L61">            return false;</span>
         }
     }
 
     public ParkingSpot getParkingSpot(int parkingSpotId) throws ClassNotFoundException {
-<span class="fc" id="L70">        ParkingSpot parkingSpot = null;</span>
-<span class="fc" id="L71">        String query = &quot;SELECT parking_id, parking_type, available FROM parking WHERE parking_id = ?&quot;;</span>
-<span class="fc" id="L72">        try (Connection connection = dataBaseConfig.getConnection();</span>
-<span class="fc" id="L73">                PreparedStatement ps = connection.prepareStatement(query)) {</span>
-<span class="fc" id="L74">            ps.setInt(1, parkingSpotId);</span>
+<span class="fc" id="L66">        ParkingSpot parkingSpot = null;</span>
+<span class="fc" id="L67">        String query = &quot;SELECT parking_id, parking_type, available FROM parking WHERE parking_id = ?&quot;;</span>
+<span class="fc" id="L68">        try (Connection connection = dataBaseConfig.getConnection();</span>
+<span class="fc" id="L69">                PreparedStatement ps = connection.prepareStatement(query)) {</span>
+<span class="fc" id="L70">            ps.setInt(1, parkingSpotId);</span>
 
-<span class="fc" id="L76">            try (ResultSet rs = ps.executeQuery()) {</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">                if (rs.next()) {</span>
-<span class="fc" id="L78">                    ParkingType parkingType = ParkingType.valueOf(rs.getString(&quot;parking_type&quot;));</span>
-<span class="fc" id="L79">                    boolean isAvailable = rs.getBoolean(&quot;available&quot;);</span>
-<span class="fc" id="L80">                    parkingSpot = new ParkingSpot(parkingSpotId, parkingType, isAvailable);</span>
+<span class="fc" id="L72">            try (ResultSet rs = ps.executeQuery()) {</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                if (rs.next()) {</span>
+<span class="fc" id="L74">                    ParkingType parkingType = ParkingType.valueOf(rs.getString(&quot;parking_type&quot;));</span>
+<span class="fc" id="L75">                    boolean isAvailable = rs.getBoolean(&quot;available&quot;);</span>
+<span class="fc" id="L76">                    parkingSpot = new ParkingSpot(parkingSpotId, parkingType, isAvailable);</span>
                 }
             }
-<span class="fc" id="L83">        } catch (SQLException e) {</span>
-<span class="fc" id="L84">            logger.error(&quot;Error fetching parking spot&quot;, e);</span>
+<span class="fc" id="L79">        } catch (SQLException e) {</span>
+<span class="fc" id="L80">            System.err.println(&quot;Error fetching parking spot&quot;);</span>
+<span class="fc" id="L81">            e.printStackTrace();</span>
         }
-<span class="fc" id="L86">        return parkingSpot;</span>
+<span class="fc" id="L83">        return parkingSpot;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

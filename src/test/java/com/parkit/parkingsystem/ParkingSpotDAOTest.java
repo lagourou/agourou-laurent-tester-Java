@@ -1,21 +1,29 @@
 package com.parkit.parkingsystem;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.apache.logging.log4j.Logger;
-import org.mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
-
-import java.sql.*;
 
 class ParkingSpotDAOTest {
 
@@ -30,8 +38,6 @@ class ParkingSpotDAOTest {
     
     @Mock
     private ResultSet resultSet;
-    @Mock
-    private Logger logger;
     
     @InjectMocks
     private ParkingSpotDAO parkingSpotDAO;
@@ -39,7 +45,6 @@ class ParkingSpotDAOTest {
     @BeforeEach
     void setUp() throws SQLException, ClassNotFoundException {
         MockitoAnnotations.openMocks(this);
-        parkingSpotDAO.setLogger(logger);
 
         when(dataBaseConfig.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT)).thenReturn(preparedStatement);
@@ -92,9 +97,6 @@ void testGetNextAvailableSlot_ExceptionHandling() throws SQLException {
 
     // Vérifier que la méthode retourne -1 en cas d'erreur
     assertEquals(-1, nextAvailableSlot);
-
-    // Vérifier que l'erreur est bien enregistrée dans les logs
-    verify(logger).error(eq("Error fetching next available slot"), any(SQLException.class));
 }
 @Test
     void testGetNextParkingSpot_Success() throws SQLException {
@@ -118,7 +120,7 @@ void testGetNextAvailableSlot_ExceptionHandling() throws SQLException {
         // Simuler la situation où aucun emplacement n'est disponible
         ParkingType parkingType = ParkingType.BIKE;
 
-        // Configurer les mocks
+        
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(false); // Aucun emplacement trouvé
 
@@ -165,7 +167,7 @@ void testGetNextAvailableSlot_ExceptionHandling() throws SQLException {
         // Vérifier que la méthode retourne false (mise à jour échouée)
         assertFalse(result);
 
-        // Vérifier que la requête préparée est bien configurée avec les bons paramètres
+        
         verify(preparedStatement).setBoolean(1, parkingSpot.isAvailable());
         verify(preparedStatement).setInt(2, parkingSpot.getId());
         verify(preparedStatement).executeUpdate();
@@ -185,9 +187,6 @@ void testGetNextAvailableSlot_ExceptionHandling() throws SQLException {
 
         // Vérifier que la méthode retourne false en cas d'exception
         assertFalse(result);
-
-        // Vérifier que l'exception est bien loguée
-        verify(logger).error(eq("Error updating parking info"), any(SQLException.class));
     }
 
     @Test
@@ -253,9 +252,6 @@ void testGetNextAvailableSlot_ExceptionHandling() throws SQLException {
 
         // Vérifier que la méthode retourne null en cas d'exception
         assertNull(result);
-
-        // Vérifier que l'exception est bien loguée
-        verify(logger).error(eq("Error fetching parking spot"), any(SQLException.class));
     }
 }
 

@@ -11,7 +11,7 @@
     </Appenders>
 
     <Loggers>
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="Console" />
             <!-- Si tu veux aussi un fichier de log -->
             <AppenderRef ref="File" />

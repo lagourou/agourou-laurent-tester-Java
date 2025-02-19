@@ -1,121 +1,93 @@
 package com.parkit.parkingsystem.integration;
 
-import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.dao.ParkingSpotDAO;
-import com.parkit.parkingsystem.dao.TicketDAO;
-import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
-import com.parkit.parkingsystem.model.ParkingSpot;
-import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.AfterAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import static org.mockito.Mockito.lenient;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Date;
-import java.sql.Timestamp;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.parkit.parkingsystem.dao.ParkingSpotDAO;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
+import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
+import com.parkit.parkingsystem.model.ParkingSpot;
+import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.service.ParkingService;
+import com.parkit.parkingsystem.util.InputReaderUtil;
 
 @ExtendWith(MockitoExtension.class)
-class ParkingDataBaseIT {
+public class ParkingDataBaseIT {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-    private static ParkingSpotDAO parkingSpotDAO;
-    private static TicketDAO ticketDAO;
+    private static DataBasePrepareService dataBasePrepareService;
+    private static final String VEHICLE_REG_NUMBER = "ABCDEF";
+    private ParkingSpotDAO parkingSpotDAO;
+    private TicketDAO ticketDAO;
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
 
-    private static final String VEHICLE_REG_NUMBER = "ABCDEF";
-
     @BeforeAll
-    private static void setUpBeforeAll() {
-        // Configurer les objets DAO
-        parkingSpotDAO = new ParkingSpotDAO();
-        parkingSpotDAO.setDataBaseConfig(dataBaseTestConfig);
-        ticketDAO = new TicketDAO();
-        ticketDAO.setDataBaseConfig(dataBaseTestConfig);
-
-        dataBaseTestConfig.clearDataBase(); // Si vous avez une méthode pour vider la base avant chaque test
-
-        // Ajouter une place de parking
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
-        parkingSpotDAO.save(parkingSpot);
-
-        // Ajouter un ticket pour le véhicule
-        Ticket ticket = new Ticket();
-        ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
-        ticket.setParkingSpot(parkingSpot);
-        ticket.setInTime(new Date());
-        ticketDAO.save(ticket);
+    private static void setUp() {
+        dataBaseTestConfig = new DataBaseTestConfig();
+        dataBasePrepareService = new DataBasePrepareService();
     }
 
     @BeforeEach
-    void setUp() throws Exception {
+    private void setUpPerTest() {
 
-        dataBaseTestConfig.clearDataBase();
-
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
-
-        Ticket ticket = new Ticket();
-        ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
-        ticket.setParkingSpot(parkingSpot);
-        ticket.setInTime(new Timestamp(System.currentTimeMillis()));
-        ticket.setPrice(10.0);
-        ticketDAO.saveTicket(ticket);
+        parkingSpotDAO = new ParkingSpotDAO();
+        parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
+        ticketDAO = new TicketDAO();
+        ticketDAO.dataBaseConfig = dataBaseTestConfig;
+        dataBasePrepareService = new DataBasePrepareService();
+        lenient().when(inputReaderUtil.readSelection()).thenReturn(1);
+        lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @AfterAll
-    private static void tearDown() {
-        // This method is intentionally left empty because there are no resources to
-        // clean up after all tests.
+    private static void tearDown(){
+
     }
 
     @Test
-void testParkingACar() throws Exception {
-    ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
-    assertNotNull(parkingSpot, "La place de parking ne doit pas être nulle");
+    void testParkingACar() throws Exception{
+        
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();
 
-    Ticket ticket = new Ticket();
-    ticket.setParkingSpot(parkingSpot);
-    ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
-    ticket.setPrice(10.0);
-    ticket.setInTime(new Timestamp(System.currentTimeMillis()));
-    ticketDAO.saveTicket(ticket);
+        Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
+        assertNotNull(ticket, "Le ticket doit être enregisté dans la base de données");
+        assertEquals(VEHICLE_REG_NUMBER, ticket.getVehicleRegNumber());
+        assertNotNull(ticket.getInTime());
 
-    Ticket fetchedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
-    assertNotNull(fetchedTicket, "Le ticket ne doit pas être nul après l'insertion dans la base de données");
+        ParkingSpot parkingSpot = parkingSpotDAO.getParkingSpot(ticket.getParkingSpot().getId());
+        assertNotNull(parkingSpot, "La place de parking  doit être enregisté dans la base de données");
+        assertFalse(parkingSpot.isAvailable());
+    }
+    @Test
+    void testParkingLotExit() throws Exception{
+        testParkingACar();
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processExitingVehicle();
 
-    System.out.println("Fetched Ticket: " + fetchedTicket);
-    System.out.println("Parking Spot: " + parkingSpot);
-}
+        Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
+        assertNotNull(ticket, "Le ticket doit être enregisté dans la base de données");
+        assertEquals(VEHICLE_REG_NUMBER, ticket.getVehicleRegNumber());
+        assertNotNull(ticket.getOutTime());
 
-@Test
-void testParkingLotExit() throws Exception {
-    ParkingSpot parkingSpot = parkingSpotDAO.getNextParkingSpot(ParkingType.CAR);
-    Ticket ticket = new Ticket();
-    ticket.setParkingSpot(parkingSpot);
-    ticket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
-    ticket.setPrice(10.0);
-    ticket.setInTime(new Timestamp(System.currentTimeMillis()));
-    ticketDAO.saveTicket(ticket);
-
-    Ticket fetchedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
-    assertNotNull(fetchedTicket, "Le ticket ne doit pas être nul après l'insertion dans la base de données");
-
-    fetchedTicket.setOutTime(new Timestamp(System.currentTimeMillis()));
-    ticketDAO.updateTicket(fetchedTicket);
-
-    Ticket updatedTicket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
-    assertNotNull(updatedTicket, "Le ticket ne doit toujours pas être nul après la mise à jour");
-
-    System.out.println("Updated Ticket: " + updatedTicket);
-    System.out.println("Parking Spot: " + parkingSpot);
-}
+        ParkingSpot parkingSpot = parkingSpotDAO.getParkingSpot(ticket.getParkingSpot().getId());
+        assertNotNull(parkingSpot, "La place de parking  doit être enregisté dans la base de données");
+        assertTrue(parkingSpot.isAvailable());
 
 
+    }
 }

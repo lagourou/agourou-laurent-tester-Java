@@ -1,14 +1,16 @@
 package com.parkit.parkingsystem.integration.config;
 
-import com.parkit.parkingsystem.config.DataBaseConfig;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-import java.sql.*;
+import com.parkit.parkingsystem.config.DataBaseConfig;
 
 public class DataBaseTestConfig extends DataBaseConfig {
 
-    private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
 
     public void clearDataBase() {
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/parkingsystem", "root",
@@ -23,7 +25,7 @@ public class DataBaseTestConfig extends DataBaseConfig {
 
     @Override
     public Connection getConnection() throws ClassNotFoundException, SQLException {
-        logger.info("Create DB connection");
+    System.out.println("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/test", "root", "rootroot");
@@ -34,9 +36,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if (con != null) {
             try {
                 con.close();
-                logger.info("Closing DB connection");
+                System.out.println("Closing DB connection");
             } catch (SQLException e) {
-                logger.error("Error while closing connection", e);
+            System.err.println("Error while closing connection");
             }
         }
     }
@@ -46,9 +48,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if (ps != null) {
             try {
                 ps.close();
-                logger.info("Closing Prepared Statement");
+                System.out.println("Closing Prepared Statement");
             } catch (SQLException e) {
-                logger.error("Error while closing prepared statement", e);
+                System.err.println("Error while closing prepared statement");
             }
         }
     }
@@ -58,9 +60,9 @@ public class DataBaseTestConfig extends DataBaseConfig {
         if (rs != null) {
             try {
                 rs.close();
-                logger.info("Closing Result Set");
+                System.out.println("Closing Result Set");
             } catch (SQLException e) {
-                logger.error("Error while closing result set", e);
+                System.err.println("Error while closing result set");
             }
         }
     }

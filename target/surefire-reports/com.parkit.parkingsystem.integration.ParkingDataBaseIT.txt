@@ -1,12 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.parkit.parkingsystem.integration.ParkingDataBaseIT
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 16.228 s <<< FAILURE! - in com.parkit.parkingsystem.integration.ParkingDataBaseIT
-testParkingLotExit  Time elapsed: 0.245 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: Le ticket ne doit pas être nul après l'insertion dans la base de données ==> expected: not <null>
-	at com.parkit.parkingsystem.integration.ParkingDataBaseIT.testParkingLotExit(ParkingDataBaseIT.java:108)
-
-testParkingACar  Time elapsed: 0.214 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: La place de parking ne doit pas être nulle ==> expected: not <null>
-	at com.parkit.parkingsystem.integration.ParkingDataBaseIT.testParkingACar(ParkingDataBaseIT.java:81)
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 19.232 s <<< FAILURE! - in com.parkit.parkingsystem.integration.ParkingDataBaseIT
+testParkingACar  Time elapsed: 9.97 s  <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.parkit.parkingsystem.model.Ticket.getVehicleRegNumber()" because "ticket" is null
+	at com.parkit.parkingsystem.integration.ParkingDataBaseIT.testParkingACar(ParkingDataBaseIT.java:68)
 

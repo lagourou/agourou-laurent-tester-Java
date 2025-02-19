@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import org.apache.logging.log4j.Logger;
-
 import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
@@ -15,11 +13,6 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class TicketDAO {
-    private Logger logger;
-    
-    public void setLogger(Logger logger) {
-        this.logger = logger;
-    }
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
@@ -51,7 +44,7 @@ public class TicketDAO {
         }
     }
 
-    public boolean saveTicket(Ticket ticket) throws ClassNotFoundException {
+    public boolean saveTicket(Ticket ticket) throws Exception {
         try (Connection con = dataBaseConfig.getConnection();
                 PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET)) {
 
@@ -59,18 +52,18 @@ public class TicketDAO {
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-            ps.setTimestamp(5,
-                    (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
+            ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : new Timestamp(ticket.getOutTime().getTime()));
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
-                logger.info("Ticket inséré avec succès pour le véhicule {}", ticket.getVehicleRegNumber());
+                System.out.println("Ticket inséré avec succès pour le véhicule " + ticket.getVehicleRegNumber());
                 return true;
             } else {
-                logger.error("Échec de l'insertion du ticket pour le véhicule {}", ticket.getVehicleRegNumber());
+                System.out.println("Échec de l'insertion du ticket pour le véhicule " + ticket.getVehicleRegNumber());
                 return false;
             }
         } catch (SQLException ex) {
-            logger.error("Erreur lors de l'insertion du ticket", ex);
+            System.out.println("Erreur lors de l'insertion du ticket");
+            ex.printStackTrace();
         }
         return false;
     }
@@ -103,10 +96,11 @@ public class TicketDAO {
                 ticket.setOutTime(rs.getTimestamp("OUT_TIME"));
                 ticket.setParkingSpot(parkingSpot);
             } else {
-                logger.info("Aucun ticket trouvé pour le véhicule {}", vehicleRegNumber);
+                System.out.println("Aucun ticket trouvé pour le véhicule " + vehicleRegNumber);
             }
         } catch (SQLException ex) {
-            logger.error("Erreur lors de la récupération du ticket pour le véhicule: {}", vehicleRegNumber, ex);
+            System.out.println("Erreur lors de la récupération du ticket pour le véhicule: " + vehicleRegNumber);
+            ex.printStackTrace();
         } finally {
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
@@ -130,7 +124,8 @@ public class TicketDAO {
                 }
             }
         } catch (ClassNotFoundException | SQLException ex) {
-            logger.error("Counting error", ex);
+            System.out.println("Counting error");
+            ex.printStackTrace();
         } finally {
             dataBaseConfig.closeConnection(con);
         }
@@ -148,10 +143,10 @@ public class TicketDAO {
 
                 int updateRowCount = ps.executeUpdate();
                 if (updateRowCount > 0) {
-                    logger.info("Ticket avec l'ID mis à jour avec succès {}", ticket.getId());
+                    System.out.println("Ticket avec l'ID mis à jour avec succès " + ticket.getId());
                     return true;
                 } else {
-                    logger.error("Erreur lors de la mise à jour du ticket avec l'ID {}", ticket.getId());
+                    System.out.println("Erreur lors de la mise à jour du ticket avec l'ID " + ticket.getId());
                     return false;
                 }
             }
@@ -159,5 +154,4 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
     }
-
 }
