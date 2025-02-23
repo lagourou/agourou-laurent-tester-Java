@@ -1,4 +1,5 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
-  "commentTranslate.hover.enabled": false
+  "commentTranslate.hover.enabled": false,
+  "sqltools.connections": []
 }

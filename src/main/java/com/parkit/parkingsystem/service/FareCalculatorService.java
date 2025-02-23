@@ -9,7 +9,7 @@ public class FareCalculatorService {
     /**
      * @param ticket
      * @param discount
-     * 
+     *
      */
     public void calculateFare(Ticket ticket, boolean discount) {
 
@@ -34,22 +34,25 @@ public class FareCalculatorService {
         }
         double rate;
         switch (ticket.getParkingSpot().getParkingType()) {
-            case CAR ->  {
+            case CAR -> {
                 rate = Fare.CAR_RATE_PER_HOUR;
                 ticket.setPrice(hours * rate);
             }
-            case BIKE ->  {
+            case BIKE -> {
                 rate = Fare.BIKE_RATE_PER_HOUR;
                 ticket.setPrice(hours * rate);
+            }
+            default -> {
+                throw new IllegalArgumentException("Type de véhicule inconnu");
             }
         }
         if (discount) {
             ticket.setPrice(ticket.getPrice() * 0.95);
         }
     }
+
     public void calculateFare(Ticket ticket) {
         calculateFare(ticket, false);
     }
-
 
 }

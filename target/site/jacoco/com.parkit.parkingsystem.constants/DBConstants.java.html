@@ -7,12 +7,13 @@ public class DBConstants {
 <span class="nc" id="L7">        throw new UnsupportedOperationException(&quot;This is a utility class and cannot be instantiated&quot;);</span>
     }
 
-    public static final String GET_NEXT_PARKING_SPOT = &quot;select min(PARKING_NUMBER) from parking where AVAILABLE = true and TYPE = ?&quot;;
-    public static final String UPDATE_PARKING_SPOT = &quot;update parking set available = ? where PARKING_NUMBER = ?&quot;;
+    public static final String GET_PARKING_SPOT = &quot;SELECT PARKING_NUMBER, TYPE, available FROM parking WHERE PARKING_NUMBER = ?&quot;;
+    public static final String UPDATE_PARKING_SPOT = &quot;UPDATE parking SET AVAILABLE = ? WHERE PARKING_NUMBER = ?&quot;;
+    public static final String GET_NEXT_PARKING_SPOT = &quot;SELECT PARKING_NUMBER FROM parking WHERE AVAILABLE = TRUE AND TYPE = ? ORDER BY PARKING_NUMBER LIMIT 1&quot;;
 
-    public static final String SAVE_TICKET = &quot;insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?)&quot;;
+    public static final String SAVE_TICKET = &quot;INSERT INTO ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) VALUES (?, ?, ?, ?, ?)&quot;;
     public static final String UPDATE_TICKET = &quot;UPDATE ticket SET PRICE=?, OUT_TIME=? WHERE ID=?&quot;;
-    public static final String GET_TICKET = &quot;select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE from ticket t,parking p where p.parking_number = t.parking_number and t.VEHICLE_REG_NUMBER=? order by t.IN_TIME  limit 1&quot;;
+    public static final String GET_TICKET = &quot;SELECT t.ID, t.PARKING_NUMBER, t.VEHICLE_REG_NUMBER, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE FROM ticket t, parking p WHERE t.PARKING_NUMBER = p.PARKING_NUMBER AND t.VEHICLE_REG_NUMBER=? ORDER BY t.IN_TIME DESC LIMIT 1&quot;;
     public static final String COUNT_TICKET = &quot;select count(*) from ticket where VEHICLE_REG_NUMBER = ?&quot;;
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

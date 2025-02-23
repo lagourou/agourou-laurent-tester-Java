@@ -9,7 +9,7 @@ import com.parkit.parkingsystem.model.Ticket;
     /**
      * @param ticket
      * @param discount
-     * 
+     *
      */
     public void calculateFare(Ticket ticket, boolean discount) {
 
@@ -34,11 +34,11 @@ import com.parkit.parkingsystem.model.Ticket;
         }
         double rate;
 <span class="pc bpc" id="L36" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()) {</span>
-            case CAR -&gt;  {
+            case CAR -&gt; {
 <span class="fc" id="L38">                rate = Fare.CAR_RATE_PER_HOUR;</span>
 <span class="fc" id="L39">                ticket.setPrice(hours * rate);</span>
             }
-            case BIKE -&gt;  {
+            case BIKE -&gt; {
 <span class="fc" id="L42">                rate = Fare.BIKE_RATE_PER_HOUR;</span>
 <span class="fc" id="L43">                ticket.setPrice(hours * rate);</span>
             }
@@ -47,10 +47,10 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L47">            ticket.setPrice(ticket.getPrice() * 0.95);</span>
         }
 <span class="fc" id="L49">    }</span>
-    public void calculateFare(Ticket ticket) {
-<span class="fc" id="L51">        calculateFare(ticket, false);</span>
-<span class="fc" id="L52">    }</span>
 
+    public void calculateFare(Ticket ticket) {
+<span class="fc" id="L52">        calculateFare(ticket, false);</span>
+<span class="fc" id="L53">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,13 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.parkit.parkingsystem.integration.ParkingDataBaseIT
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 12.951 s <<< FAILURE! - in com.parkit.parkingsystem.integration.ParkingDataBaseIT
-testParkingLotExit  Time elapsed: 6.725 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: Le ticket doit être enregisté dans la base de données lorsque le véhicule rentre ==> expected: not <null>
-	at com.parkit.parkingsystem.integration.ParkingDataBaseIT.testParkingACar(ParkingDataBaseIT.java:68)
-	at com.parkit.parkingsystem.integration.ParkingDataBaseIT.testParkingLotExit(ParkingDataBaseIT.java:78)
-
-testParkingACar  Time elapsed: 0.936 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: Le ticket doit être enregisté dans la base de données lorsque le véhicule rentre ==> expected: not <null>
-	at com.parkit.parkingsystem.integration.ParkingDataBaseIT.testParkingACar(ParkingDataBaseIT.java:68)
-
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.081 s - in com.parkit.parkingsystem.integration.ParkingDataBaseIT

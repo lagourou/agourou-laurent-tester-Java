@@ -10,7 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import static org.mockito.Mockito.lenient;
+import org.mockito.Mockito;
+
+import static org.mockito.Mockito.when;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
@@ -48,19 +51,24 @@ public class ParkingDataBaseIT {
         ticketDAO = new TicketDAO();
         ticketDAO.dataBaseConfig = dataBaseTestConfig;
         dataBasePrepareService = new DataBasePrepareService();
-        lenient().when(inputReaderUtil.readSelection()).thenReturn(1);
-        lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+
         dataBasePrepareService.clearDataBaseEntries();
+
+        Mockito.lenient().when(inputReaderUtil.readSelection()).thenReturn(1);
+        Mockito.lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
     }
 
     @AfterAll
-    private static void tearDown(){
+    private static void tearDown() {
 
     }
 
     @Test
-    void testParkingACar() throws Exception{
-        
+    void testParkingACar() throws Exception {
+
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
 
@@ -73,8 +81,9 @@ public class ParkingDataBaseIT {
         assertNotNull(parkingSpot, "La place de parking  doit être enregisté dans la base de données");
         assertFalse(parkingSpot.isAvailable());
     }
+
     @Test
-    void testParkingLotExit() throws Exception{
+    void testParkingLotExit() throws Exception {
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
@@ -88,6 +97,11 @@ public class ParkingDataBaseIT {
         assertNotNull(parkingSpot, "La place de parking  doit être enregisté dans la base de données");
         assertTrue(parkingSpot.isAvailable());
 
+    }
+
+    @Test
+    void testParkingLotExitRecurringUser() {
 
     }
+
 }

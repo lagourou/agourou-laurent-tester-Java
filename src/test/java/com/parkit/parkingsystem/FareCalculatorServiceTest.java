@@ -30,6 +30,7 @@ class FareCalculatorServiceTest {
         fareCalculatorService = new FareCalculatorService();
         ticket = new Ticket();
     }
+
     @Test
     void calculateFareCarTest() {
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
@@ -42,6 +43,7 @@ class FareCalculatorServiceTest {
         double expectedFare = 1 * Fare.CAR_RATE_PER_HOUR;
         assertEquals(expectedFare, ticket.getPrice(), 0.001, "Le tarif calculé est incorrect");
     }
+
     @Test
     void calculateFareBikeTest() {
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
@@ -54,6 +56,7 @@ class FareCalculatorServiceTest {
         double expectedFare = 1 * Fare.BIKE_RATE_PER_HOUR;
         assertEquals(expectedFare, ticket.getPrice(), 0.001, "Le tarif calculé est incorrect");
     }
+
     @Test
     void calculateFareCar() {
         Date inTime = new Date();
@@ -94,7 +97,8 @@ class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
 
         assertThrows(IllegalArgumentException.class, () -> {
-        fareCalculatorService.calculateFare(ticket, false);}); 
+            fareCalculatorService.calculateFare(ticket, false);
+        });
 
     }
 
@@ -108,8 +112,9 @@ class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-        assertThrows(IllegalArgumentException.class, () -> { 
-        fareCalculatorService.calculateFare(ticket, false);});
+        assertThrows(IllegalArgumentException.class, () -> {
+            fareCalculatorService.calculateFare(ticket, false);
+        });
     }
 
     @Test

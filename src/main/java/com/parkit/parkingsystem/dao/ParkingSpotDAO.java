@@ -34,7 +34,6 @@ public class ParkingSpotDAO {
             }
         } catch (Exception ex) {
             System.err.println("Error fetching next available slot");
-            ex.printStackTrace();
         }
         return result;
     }
@@ -57,29 +56,27 @@ public class ParkingSpotDAO {
             return (updateRowCount == 1);
         } catch (Exception ex) {
             System.err.println("Error updating parking info");
-            ex.printStackTrace();
             return false;
         }
     }
 
     public ParkingSpot getParkingSpot(int parkingSpotId) throws ClassNotFoundException {
         ParkingSpot parkingSpot = null;
-        String query = "SELECT parking_id, parking_type, available FROM parking WHERE parking_id = ?";
+        String query = "SELECT PARKING_NUMBER, TYPE, available FROM parking WHERE PARKING_NUMBER = ?";
         try (Connection connection = dataBaseConfig.getConnection();
                 PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, parkingSpotId);
-
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ParkingType parkingType = ParkingType.valueOf(rs.getString("parking_type"));
+                    ParkingType parkingType = ParkingType.valueOf(rs.getString("TYPE"));
                     boolean isAvailable = rs.getBoolean("available");
                     parkingSpot = new ParkingSpot(parkingSpotId, parkingType, isAvailable);
                 }
             }
         } catch (SQLException e) {
             System.err.println("Error fetching parking spot");
-            e.printStackTrace();
         }
         return parkingSpot;
     }
+
 }
