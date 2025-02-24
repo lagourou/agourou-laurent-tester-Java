@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.parkit.parkingsystem.integration.ParkingDataBaseIT" time="9.081" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.parkit.parkingsystem.integration.ParkingDataBaseIT" time="11.342" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -16,7 +16,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-23\bin"/>
-    <property name="sun.java.command" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire1320208415935505276\surefirebooter16816741417412930521.jar C:\Users\AGOUROU GUSTAVE\AppData\Local\Temp\surefire1320208415935505276 2025-02-24T01-35-33_876-jvmRun1 surefire10588544056170100760tmp surefire_114307717015506038268tmp"/>
+    <property name="sun.java.command" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire10975202871154549847\surefirebooter18197275096715222826.jar C:\Users\AGOUROU GUSTAVE\AppData\Local\Temp\surefire10975202871154549847 2025-02-24T18-48-22_088-jvmRun1 surefire12702222313615348355tmp surefire_111095035536709603585tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\AGOUROU GUSTAVE\Downloads\Open Classroom\P4\parking-system-agourou-laurent\agourou-laurent-tester-Java\target\test-classes;C:\Users\AGOUROU GUSTAVE\Downloads\Open Classroom\P4\parking-system-agourou-laurent\agourou-laurent-tester-Java\target\classes;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apache\logging\log4j\log4j-api\2.17.1\log4j-api-2.17.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apache\logging\log4j\log4j-core\2.17.1\log4j-core-2.17.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\mysql\mysql-connector-java\8.0.17\mysql-connector-java-8.0.17.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\com\google\protobuf\protobuf-java\3.6.1\protobuf-java-3.6.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.7.2\junit-jupiter-api-5.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\platform\junit-platform-commons\1.7.2\junit-platform-commons-1.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.7.2\junit-jupiter-engine-5.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\platform\junit-platform-engine\1.7.2\junit-platform-engine-1.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\net\bytebuddy\byte-buddy\1.11.19\byte-buddy-1.11.19.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.19\byte-buddy-agent-1.11.19.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\mockito\mockito-junit-jupiter\4.0.0\mockito-junit-jupiter-4.0.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire1320208415935505276\surefirebooter16816741417412930521.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire10975202871154549847\surefirebooter18197275096715222826.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="23.0.1+11-39"/>
@@ -59,6 +59,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="testParkingLotExit" classname="com.parkit.parkingsystem.integration.ParkingDataBaseIT" time="6.637"/>
-  <testcase name="testParkingACar" classname="com.parkit.parkingsystem.integration.ParkingDataBaseIT" time="0.15"/>
+  <testcase name="testParkingLotExitRecurringUser" classname="com.parkit.parkingsystem.integration.ParkingDataBaseIT" time="6.188"/>
+  <testcase name="testParkingLotExit" classname="com.parkit.parkingsystem.integration.ParkingDataBaseIT" time="1.267"/>
+  <testcase name="testParkingACar" classname="com.parkit.parkingsystem.integration.ParkingDataBaseIT" time="0.248"/>
 </testsuite>

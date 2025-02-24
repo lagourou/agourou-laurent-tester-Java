@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.parkit.parkingsystem.ParkingSpotDAOTest
 -------------------------------------------------------------------------------
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.492 s - in com.parkit.parkingsystem.ParkingSpotDAOTest
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.368 s - in com.parkit.parkingsystem.ParkingSpotDAOTest

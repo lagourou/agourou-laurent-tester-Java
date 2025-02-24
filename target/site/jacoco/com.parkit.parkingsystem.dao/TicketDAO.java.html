@@ -38,7 +38,7 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L38">            ps.setString(2, ticket.getVehicleRegNumber());</span>
 <span class="fc" id="L39">            ps.setDouble(3, ticket.getPrice());</span>
 <span class="fc" id="L40">            ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));</span>
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));</span>
 
 <span class="fc" id="L43">            int result = ps.executeUpdate();</span>
 <span class="fc" id="L44">            logger.info(&quot;Ticket inserted, result: &quot; + result);</span>

@@ -14,8 +14,12 @@ import org.mockito.Mockito;
 
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
@@ -31,6 +35,7 @@ public class ParkingDataBaseIT {
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static DataBasePrepareService dataBasePrepareService;
     private static final String VEHICLE_REG_NUMBER = "ABCDEF";
+    private static final int ID = 1;
     private ParkingSpotDAO parkingSpotDAO;
     private TicketDAO ticketDAO;
 
@@ -102,6 +107,31 @@ public class ParkingDataBaseIT {
     @Test
     void testParkingLotExitRecurringUser() {
 
-    }
+        ParkingSpot parkingSpot = new ParkingSpot(ID, ParkingType.CAR, true);
 
+        // Simulation d'un ticket pour un utilisateur récurrent
+        Ticket newTicket = new Ticket();
+        newTicket.setParkingSpot(parkingSpot);
+        newTicket.setVehicleRegNumber(VEHICLE_REG_NUMBER);
+        newTicket.setId(ID);
+        newTicket.setInTime(new Date());
+        newTicket.setOutTime(new Date(System.currentTimeMillis() + (60 * 60 * 1000))); // Il y a une heure
+        newTicket.setPrice(1.5); // Prix inventé
+        ticketDAO.saveTicket(newTicket);
+
+        // Simuler l'entrée/sortie d'un véhicule
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();
+        parkingService.processExitingVehicle();
+
+        // Vérifie que la remise est bien appliquée
+        Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
+        assertNotNull(ticket, "Le ticket doit être enregisté dans la base de données");
+
+        double duration = (ticket.getOutTime().getTime() - ticket.getInTime().getTime()) / (60 * 60 * 1000.0);
+        double priceWithoutDiscount = duration * Fare.CAR_RATE_PER_HOUR;
+        double priceWithDiscount = priceWithoutDiscount * 0.95;
+
+        assertEquals(priceWithDiscount, ticket.getPrice(), 0.1);
+    }
 }

@@ -15,7 +15,6 @@ public class ParkingSpotDAO {
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public void save(ParkingSpot parkingSpot) {
-        // Implementation to save the parking spot to the database
     }
 
     public void setDataBaseConfig(DataBaseConfig dataBaseConfig) {
