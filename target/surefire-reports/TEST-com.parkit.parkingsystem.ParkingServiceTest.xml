@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.parkit.parkingsystem.ParkingServiceTest" time="5.346" tests="13" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.parkit.parkingsystem.ParkingServiceTest" time="10.269" tests="13" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -16,7 +16,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-23\bin"/>
-    <property name="sun.java.command" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire832984921917060024\surefirebooter1251099469270261775.jar C:\Users\AGOUROU GUSTAVE\AppData\Local\Temp\surefire832984921917060024 2025-02-24T18-48-22_088-jvmRun1 surefire194629058574479973tmp surefire_08203171019646829600tmp"/>
+    <property name="sun.java.command" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire5740064768190472947\surefirebooter14721163277543366555.jar C:\Users\AGOUROU GUSTAVE\AppData\Local\Temp\surefire5740064768190472947 2025-02-24T21-06-17_350-jvmRun1 surefire1533004770147605013tmp surefire_01458710952122551087tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\AGOUROU GUSTAVE\Downloads\Open Classroom\P4\parking-system-agourou-laurent\agourou-laurent-tester-Java\target\test-classes;C:\Users\AGOUROU GUSTAVE\Downloads\Open Classroom\P4\parking-system-agourou-laurent\agourou-laurent-tester-Java\target\classes;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apache\logging\log4j\log4j-api\2.17.1\log4j-api-2.17.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apache\logging\log4j\log4j-core\2.17.1\log4j-core-2.17.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\mysql\mysql-connector-java\8.0.17\mysql-connector-java-8.0.17.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\com\google\protobuf\protobuf-java\3.6.1\protobuf-java-3.6.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.7.2\junit-jupiter-api-5.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\platform\junit-platform-commons\1.7.2\junit-platform-commons-1.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.7.2\junit-jupiter-engine-5.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\platform\junit-platform-engine\1.7.2\junit-platform-engine-1.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\net\bytebuddy\byte-buddy\1.11.19\byte-buddy-1.11.19.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.19\byte-buddy-agent-1.11.19.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\mockito\mockito-junit-jupiter\4.0.0\mockito-junit-jupiter-4.0.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire832984921917060024\surefirebooter1251099469270261775.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire5740064768190472947\surefirebooter14721163277543366555.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="23.0.1+11-39"/>
@@ -59,17 +59,17 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="testGetNextParkingNumberIfAvailableException" classname="com.parkit.parkingsystem.ParkingServiceTest" time="4.978"/>
-  <testcase name="testGetNextParkingNumberIfAvailableParkingNumberNotFound" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.044"/>
-  <testcase name="processExitingVehicleTestUnableUpdate" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.099"/>
-  <testcase name="testgetVehichleTypeBike" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.011"/>
-  <testcase name="testGetNextParkingNumberIfAvailableParkingNumberWrongArgument" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.014"/>
-  <testcase name="testProcessIncomingVehicle_WithDiscount" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.028"/>
-  <testcase name="testGetNextParkingNumberIfAvailable" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.02"/>
-  <testcase name="testGetVehichleRegNumber" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.012"/>
-  <testcase name="testProcessIncomingVehicle_WithoutDiscount" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.034"/>
-  <testcase name="testgetVehichleTypeCar" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.024"/>
-  <testcase name="processExitingVehicleSucessfulUpdate" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.015"/>
-  <testcase name="processExitingVehicleTest" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.016"/>
-  <testcase name="testProcessIncomingVehicle" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.022"/>
+  <testcase name="testGetNextParkingNumberIfAvailableException" classname="com.parkit.parkingsystem.ParkingServiceTest" time="9.223"/>
+  <testcase name="testGetNextParkingNumberIfAvailableParkingNumberNotFound" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.068"/>
+  <testcase name="processExitingVehicleTestUnableUpdate" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.246"/>
+  <testcase name="testgetVehichleTypeBike" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.016"/>
+  <testcase name="testGetNextParkingNumberIfAvailableParkingNumberWrongArgument" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.046"/>
+  <testcase name="testProcessIncomingVehicle_WithDiscount" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.119"/>
+  <testcase name="testGetNextParkingNumberIfAvailable" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.035"/>
+  <testcase name="testGetVehichleRegNumber" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.034"/>
+  <testcase name="testProcessIncomingVehicle_WithoutDiscount" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.108"/>
+  <testcase name="testgetVehichleTypeCar" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.143"/>
+  <testcase name="processExitingVehicleSucessfulUpdate" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.02"/>
+  <testcase name="processExitingVehicleTest" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.006"/>
+  <testcase name="testProcessIncomingVehicle" classname="com.parkit.parkingsystem.ParkingServiceTest" time="0.146"/>
 </testsuite>
