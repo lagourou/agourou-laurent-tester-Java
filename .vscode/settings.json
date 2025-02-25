@@ -1,5 +1,6 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
   "commentTranslate.hover.enabled": false,
-  "sqltools.connections": []
+  "sqltools.connections": [],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

@@ -24,6 +24,7 @@ public class FareCalculatorService {
         double minutes = duration / (1000.0 * 60);
         double hours = minutes / 60.0;
 
+        // Condition pour parking gratuit si moins de 30 minutes
         if (minutes <= 30) {
             ticket.setPrice(0);
             return;
@@ -46,11 +47,14 @@ public class FareCalculatorService {
                 throw new IllegalArgumentException("Type de véhicule inconnu");
             }
         }
+
+        // Condition pour remise de 5% si discount est vrai
         if (discount) {
             ticket.setPrice(ticket.getPrice() * 0.95);
         }
     }
 
+    // Méthode calculateFare pour les cas sans remise
     public void calculateFare(Ticket ticket) {
         calculateFare(ticket, false);
     }

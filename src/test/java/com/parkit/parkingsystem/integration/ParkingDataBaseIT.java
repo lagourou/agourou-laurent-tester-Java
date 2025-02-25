@@ -51,22 +51,25 @@ public class ParkingDataBaseIT {
     @BeforeEach
     private void setUpPerTest() {
 
+        // Initialise les objets pour accéder aux données
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
         ticketDAO.dataBaseConfig = dataBaseTestConfig;
+        // Initialise le service de préparation de la base de données
         dataBasePrepareService = new DataBasePrepareService();
 
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-
-        dataBasePrepareService.clearDataBaseEntries();
-
+        // Simule le choix du type de véhicule par l'utilisateur
         Mockito.lenient().when(inputReaderUtil.readSelection()).thenReturn(1);
+        // Simule la saisie du numéro d'immatriculation par l'utilisateur
         Mockito.lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+
+        // Nettoie les entrées de la base de données
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @AfterAll
+    // Fermer la connexion à la base de données
     private static void tearDown() {
 
     }
@@ -74,32 +77,46 @@ public class ParkingDataBaseIT {
     @Test
     void testParkingACar() throws Exception {
 
+        // Initialise le service de parking
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processIncomingVehicle();
+        parkingService.processIncomingVehicle(); // Arrivée d'un véhicule
 
+        // Récupère et vérifie que le ticket est bien enregistré dans la base de données
         Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
         assertNotNull(ticket, "Le ticket doit être enregisté dans la base de données");
         assertEquals(VEHICLE_REG_NUMBER, ticket.getVehicleRegNumber());
         assertNotNull(ticket.getInTime());
 
+        // Récupère et vérifie que la place de parking est bien enregistrée dans la base
+        // de données
         ParkingSpot parkingSpot = parkingSpotDAO.getParkingSpot(ticket.getParkingSpot().getId());
         assertNotNull(parkingSpot, "La place de parking  doit être enregisté dans la base de données");
+
+        // Vérifie que la place de parking n'est plus disponible
         assertFalse(parkingSpot.isAvailable());
     }
 
     @Test
     void testParkingLotExit() throws Exception {
-        testParkingACar();
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.processExitingVehicle();
 
+        testParkingACar();// Simule l'arrivé d'un véhicule
+
+        // Initialise le service de parking
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processExitingVehicle(); // Sortie d'un véhicule
+
+        // Récupère et vérifie que le ticket est bien enregistré dans la base de données
         Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
         assertNotNull(ticket, "Le ticket doit être enregisté dans la base de données");
         assertEquals(VEHICLE_REG_NUMBER, ticket.getVehicleRegNumber());
         assertNotNull(ticket.getOutTime());
 
+        // Récupère et vérifie que la place de parking est bien enregistrée dans la base
+        // de données
         ParkingSpot parkingSpot = parkingSpotDAO.getParkingSpot(ticket.getParkingSpot().getId());
         assertNotNull(parkingSpot, "La place de parking  doit être enregisté dans la base de données");
+
+        // Vérifie que la place de parking est de nouveau disponible
         assertTrue(parkingSpot.isAvailable());
 
     }
@@ -107,6 +124,7 @@ public class ParkingDataBaseIT {
     @Test
     void testParkingLotExitRecurringUser() {
 
+        // Crée une place de parking disponible
         ParkingSpot parkingSpot = new ParkingSpot(ID, ParkingType.CAR, true);
 
         // Simulation d'un ticket pour un utilisateur récurrent
@@ -124,14 +142,18 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();
 
-        // Vérifie que la remise est bien appliquée
+        // Vérifie que le ticket est bien enregistré
         Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
         assertNotNull(ticket, "Le ticket doit être enregisté dans la base de données");
 
+        // Calcule la durée de stationnement
         double duration = (ticket.getOutTime().getTime() - ticket.getInTime().getTime()) / (60 * 60 * 1000.0);
+        // Calcule du prix sans remise
         double priceWithoutDiscount = duration * Fare.CAR_RATE_PER_HOUR;
+        // Calcule du prix avec remise
         double priceWithDiscount = priceWithoutDiscount * 0.95;
 
+        // Vérifie que le prix du ticket correspond au prix avec remise
         assertEquals(priceWithDiscount, ticket.getPrice(), 0.1);
     }
 }

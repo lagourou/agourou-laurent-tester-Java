@@ -24,36 +24,40 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L24">        double minutes = duration / (1000.0 * 60);</span>
 <span class="fc" id="L25">        double hours = minutes / 60.0;</span>
 
-<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (minutes &lt;= 30) {</span>
-<span class="fc" id="L28">            ticket.setPrice(0);</span>
-<span class="fc" id="L29">            return;</span>
+        // Condition pour parking gratuit si moins de 30 minutes
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (minutes &lt;= 30) {</span>
+<span class="fc" id="L29">            ticket.setPrice(0);</span>
+<span class="fc" id="L30">            return;</span>
         }
-<span class="fc" id="L31">        ParkingType parkingType = ticket.getParkingSpot().getParkingType();</span>
-<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (parkingType == null) {</span>
-<span class="fc" id="L33">            throw new IllegalArgumentException(&quot;Parking type is unknown&quot;);</span>
+<span class="fc" id="L32">        ParkingType parkingType = ticket.getParkingSpot().getParkingType();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if (parkingType == null) {</span>
+<span class="fc" id="L34">            throw new IllegalArgumentException(&quot;Parking type is unknown&quot;);</span>
         }
         double rate;
-<span class="pc bpc" id="L36" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()) {</span>
+<span class="pc bpc" id="L37" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()) {</span>
             case CAR -&gt; {
-<span class="fc" id="L38">                rate = Fare.CAR_RATE_PER_HOUR;</span>
-<span class="fc" id="L39">                ticket.setPrice(hours * rate);</span>
+<span class="fc" id="L39">                rate = Fare.CAR_RATE_PER_HOUR;</span>
+<span class="fc" id="L40">                ticket.setPrice(hours * rate);</span>
             }
             case BIKE -&gt; {
-<span class="fc" id="L42">                rate = Fare.BIKE_RATE_PER_HOUR;</span>
-<span class="fc" id="L43">                ticket.setPrice(hours * rate);</span>
+<span class="fc" id="L43">                rate = Fare.BIKE_RATE_PER_HOUR;</span>
+<span class="fc" id="L44">                ticket.setPrice(hours * rate);</span>
             }
             default -&gt; {
-<span class="nc" id="L46">                throw new IllegalArgumentException(&quot;Type de véhicule inconnu&quot;);</span>
+<span class="nc" id="L47">                throw new IllegalArgumentException(&quot;Type de véhicule inconnu&quot;);</span>
             }
         }
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (discount) {</span>
-<span class="fc" id="L50">            ticket.setPrice(ticket.getPrice() * 0.95);</span>
-        }
-<span class="fc" id="L52">    }</span>
 
+        // Condition pour remise de 5% si discount est vrai
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (discount) {</span>
+<span class="fc" id="L53">            ticket.setPrice(ticket.getPrice() * 0.95);</span>
+        }
+<span class="fc" id="L55">    }</span>
+
+    // Méthode calculateFare pour les cas sans remise
     public void calculateFare(Ticket ticket) {
-<span class="fc" id="L55">        calculateFare(ticket, false);</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L59">        calculateFare(ticket, false);</span>
+<span class="fc" id="L60">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

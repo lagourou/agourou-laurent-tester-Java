@@ -19,6 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
+import java.util.Date;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
@@ -246,7 +247,7 @@ class TicketDAOTest {
 
         // Vérifie que le nombre de tiket est correct
         assertEquals(5, ticketCount);
-        // Vérifie que les méthodes ont été appelée une fois
+        // Vérifie que les méthodes ont été appelées une fois
         verify(dataBaseConfig, times(1)).getConnection();
         verify(connection, times(1)).prepareStatement(DBConstants.COUNT_TICKET);
         verify(preparedStatement, times(1)).setString(1, VEHICLE_REG_NUMBER);
@@ -266,7 +267,7 @@ class TicketDAOTest {
 
         // Vérifie que le nombre de tiket est 0
         assertEquals(0, ticketCount);
-        // Vérifie que les méthodes ont été appelée une fois
+        // Vérifie que les méthodes ont été appelées une fois
         verify(dataBaseConfig, times(1)).getConnection();
         verify(connection, times(1)).prepareStatement(DBConstants.COUNT_TICKET);
         verify(preparedStatement, times(1)).setString(1, VEHICLE_REG_NUMBER);
@@ -284,10 +285,62 @@ class TicketDAOTest {
 
         // Vérifie que le nombre de tiket est 0 en cas d'erreur
         assertEquals(0, ticketCount);
-        // Vérifie que les méthodes ont été appelée une fois
+        // Vérifie que les méthodes ont été appelées une fois
         verify(dataBaseConfig, times(1)).getConnection();
         verify(connection, times(1)).prepareStatement(DBConstants.COUNT_TICKET);
         verify(preparedStatement, times(1)).setString(1, VEHICLE_REG_NUMBER);
         verify(preparedStatement, times(1)).executeQuery();
     }
+
+    @Test
+    public void testUpdateTicket() throws Exception {
+        // Assurez-vous que l'objet ticket est correctement initialisé
+        Ticket ticket = new Ticket();
+        ticket.setPrice(10.0); // Assurez-vous que le prix est correctement défini
+        ticket.setOutTime(new Date()); // Assurez-vous que la date de sortie est définie
+        ticket.setId(123); // Assurez-vous que l'ID est correctement défini
+
+        // Simuler que l'exécution de la mise à jour a réussi
+        when(preparedStatement.executeUpdate()).thenReturn(1); // Renvoie 1 pour indiquer qu'une ligne a été mise à jour
+
+        // Appeler la méthode updateTicket avec un ticket simulé
+        boolean result = ticketDAO.updateTicket(ticket);
+
+        // Vérifier que le résultat est true, ce qui signifie que la mise à jour a
+        // réussi
+        assertTrue(result);
+
+        // Vérifier que setDouble, setTimestamp et setInt sont appelés avec les bons
+        // paramètres
+        verify(preparedStatement).setDouble(1, ticket.getPrice());
+        verify(preparedStatement).setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
+        verify(preparedStatement).setInt(3, ticket.getId());
+
+        // Vérifier que executeUpdate() a été appelé
+        verify(preparedStatement).executeUpdate();
+
+        // Vérifier que closePreparedStatement() et closeConnection() ont été appelés
+        verify(dataBaseConfig).closePreparedStatement(preparedStatement);
+        verify(dataBaseConfig).closeConnection(connection);
+    }
+
+    @Test
+    public void testUpdateTicketSQLException() throws Exception {
+        // Simuler l'exception SQL lors de l'exécution de l'update
+        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Erreur SQL"));
+
+        // Appeler la méthode qui doit gérer l'exception
+        boolean result = ticketDAO.updateTicket(ticket);
+
+        // Vérifier que le résultat est false, puisque l'exception se produit
+        assertFalse(result);
+
+        // Vérifier que même en cas d'exception, la méthode closePreparedStatement est
+        // bien appelée
+        verify(dataBaseConfig).closePreparedStatement(preparedStatement);
+
+        // Vérifier que la connexion est fermée
+        verify(dataBaseConfig).closeConnection(connection);
+    }
+
 }

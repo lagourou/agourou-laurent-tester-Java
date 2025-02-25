@@ -30,10 +30,8 @@ public class TicketDAO {
         PreparedStatement ps = null;
         try {
             con = dataBaseConfig.getConnection();
-            logger.info("Connexion établie pour saveTicket");
             ps = con.prepareStatement(DBConstants.SAVE_TICKET); // PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME,
                                                                 // OUT_TIME
-            logger.info("Inserting ticket for vehicle: " + ticket.getVehicleRegNumber());
             ps.setInt(1, ticket.getParkingSpot().getId());
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setDouble(3, ticket.getPrice());
@@ -41,14 +39,11 @@ public class TicketDAO {
             ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
 
             int result = ps.executeUpdate();
-            logger.info("Ticket inserted, result: " + result);
             return result == 1;
         } catch (SQLException e) {
             logger.error("Erreur SQL lors de l'enregistrement du ticket", e);
-        } catch (IllegalArgumentException e) {
-            logger.error("Argument invalide dans le ticket: " + e.getMessage(), e);
         } catch (Exception ex) {
-            logger.error("Error saving ticket", ex);
+            logger.error("Erreur de sauvegarde du ticket", ex);
         } finally {
             dataBaseConfig.closePreparedStatement(ps);
             dataBaseConfig.closeConnection(con);
@@ -82,7 +77,7 @@ public class TicketDAO {
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
         } catch (Exception ex) {
-            logger.error("Error fetching next available slot", ex);
+            logger.error("Erreur lors de la récupération du prochain emplacement disponible", ex);
         } finally {
             dataBaseConfig.closeConnection(con);
         }
@@ -91,50 +86,57 @@ public class TicketDAO {
 
     public boolean updateTicket(Ticket ticket) throws Exception {
         Connection con = null;
+        PreparedStatement ps = null;
         try {
             con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET); // PRICE, OUT_TIME, ID
+            ps = con.prepareStatement(DBConstants.UPDATE_TICKET); // PRICE, OUT_TIME, ID
             ps.setDouble(1, ticket.getPrice());
             ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
             ps.setInt(3, ticket.getId());
+
             int result = ps.executeUpdate();
-            dataBaseConfig.closePreparedStatement(ps);
 
             if (result == 1) {
-                logger.info("Ticket mis à jour avec succès, ID: " + ticket.getId());
                 return true;
             } else {
-                logger.warn("Aucune ligne mise à jour pour le ticket avec ID: " + ticket.getId());
                 return false;
             }
         } catch (SQLException e) {
             logger.error("Erreur SQL lors de la mise à jour du ticket", e);
+            return false;
         } catch (Exception ex) {
-            logger.error("Error saving ticket info", ex);
+            logger.error("Erreur lors de la mise à jour du ticket", ex);
+            return false;
         } finally {
-            dataBaseConfig.closeConnection(con);
+            if (ps != null) {
+                dataBaseConfig.closePreparedStatement(ps);
+            }
+            if (con != null) {
+                dataBaseConfig.closeConnection(con);
+            }
         }
-        return false;
     }
 
+    // Méthode pour obtenir le nbre de tickets pour un véhicule donné
     public int getNbTicket(String vehicleRegNumber) throws Exception {
-        Connection con = null;
-        int ticketCount = 0;
+        Connection con = null; // Initialisation de la connexion à la base de données
+        int ticketCount = 0; // Initialisation du compteur
         try {
-            con = dataBaseConfig.getConnection();
-            try (PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKET)) {
-                ps.setString(1, vehicleRegNumber);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        ticketCount = rs.getInt(1);
+            con = dataBaseConfig.getConnection(); // Connexion à la base de données
+            try (PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKET)) { // Préparation de la requête
+                                                                                          // SQL
+                ps.setString(1, vehicleRegNumber); // Remplace le paramètre par la plaque
+                try (ResultSet rs = ps.executeQuery()) { // Exécute la requête
+                    if (rs.next()) { // Vérifie si le résultat contient une ligne
+                        ticketCount = rs.getInt(1); // Récupère le nbre de tickets
                     }
                 }
             }
         } catch (SQLException ex) {
             logger.error("Erreur lors du comptage des tickets pour le véhicule: " + vehicleRegNumber, ex);
         } finally {
-            dataBaseConfig.closeConnection(con);
+            dataBaseConfig.closeConnection(con); // Ferme la connexion
         }
-        return ticketCount;
+        return ticketCount; // Retourne le nbre de tickets
     }
 }

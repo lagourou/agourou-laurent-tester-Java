@@ -164,16 +164,22 @@ class FareCalculatorServiceTest {
 
     @Test
     void calculateFareCarWithLessThan30minutesParkingTime() {
+        // Simule le temps d'entrée pour un stationnement de moins de 30 minutes
         Date intTime = new Date();
         intTime.setTime(System.currentTimeMillis() - (30 * 60 * 1000));
-
+        // Initialise l'heure de sortie pour l'heure actuelle
         Date outTime = new Date();
+
+        // Créer une place de parking pour une voiture
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
+        // Configure le ticket avec les temps d'entrée/sortie et la place de parking
         ticket.setInTime(intTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
+        // Calcul le tarif sans remise
         fareCalculatorService.calculateFare(ticket, false);
+        // Vérifie que le tarif est égal à 0
         assertEquals(0, ticket.getPrice());
     }
 
@@ -194,20 +200,25 @@ class FareCalculatorServiceTest {
 
     @Test
     void calculateFareCarWithDiscount() {
+        // Crée une date d'entrée actuelle
         Date intTime = new Date();
 
+        // Simule le temps d'entrée pour un stationnement de 1 heure
         Date outTime = new Date();
         outTime.setTime(System.currentTimeMillis() + (60 * 60 * 1000));
 
+        // Crée une place de parking pour une voiture de ID 1
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
+        // Crée un ticket pour la voiture
         Ticket discountTicket = new Ticket();
         discountTicket.setInTime(intTime);
         discountTicket.setOutTime(outTime);
         discountTicket.setParkingSpot(parkingSpot);
-
+        // Calcul le tarif avec remise
         fareCalculatorService.calculateFare(discountTicket, true);
 
+        // Vérifie que la remise de 5% est appliqué
         assertEquals(0.95 * Fare.CAR_RATE_PER_HOUR * 1, discountTicket.getPrice(), 0.0001);
     }
 
