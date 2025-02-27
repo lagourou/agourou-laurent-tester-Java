@@ -1,5 +1,7 @@
 package com.parkit.parkingsystem.integration;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -11,11 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.when;
-
-import java.util.Date;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.constants.Fare;
@@ -135,6 +132,7 @@ public class ParkingDataBaseIT {
         newTicket.setInTime(new Date());
         newTicket.setOutTime(new Date(System.currentTimeMillis() + (60 * 60 * 1000))); // Il y a une heure
         newTicket.setPrice(1.5); // Prix inventé
+        System.out.println("Enregistrement du ticket: " + newTicket);
         ticketDAO.saveTicket(newTicket);
 
         // Simuler l'entrée/sortie d'un véhicule
@@ -144,6 +142,7 @@ public class ParkingDataBaseIT {
 
         // Vérifie que le ticket est bien enregistré
         Ticket ticket = ticketDAO.getTicket(VEHICLE_REG_NUMBER);
+        System.out.println("Ticket récupéré: " + ticket);
         assertNotNull(ticket, "Le ticket doit être enregisté dans la base de données");
 
         // Calcule la durée de stationnement

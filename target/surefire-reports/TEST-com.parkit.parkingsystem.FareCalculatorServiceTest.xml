@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.952" tests="13" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.346" tests="13" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -16,7 +16,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-23\bin"/>
-    <property name="sun.java.command" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire13056550893759886080\surefirebooter3124363105628224193.jar C:\Users\AGOUROU GUSTAVE\AppData\Local\Temp\surefire13056550893759886080 2025-02-26T08-42-48_963-jvmRun1 surefire9128142676196640468tmp surefire_017348954148769174687tmp"/>
+    <property name="sun.java.command" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire11622158192584459957\surefirebooter6669607156332020284.jar C:\Users\AGOUROU GUSTAVE\AppData\Local\Temp\surefire11622158192584459957 2025-02-27T18-51-59_216-jvmRun1 surefire5243120602937571408tmp surefire_012203327031551621885tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\AGOUROU GUSTAVE\Downloads\Open Classroom\P4\parking-system-agourou-laurent\agourou-laurent-tester-Java\target\test-classes;C:\Users\AGOUROU GUSTAVE\Downloads\Open Classroom\P4\parking-system-agourou-laurent\agourou-laurent-tester-Java\target\classes;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apache\logging\log4j\log4j-api\2.17.1\log4j-api-2.17.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apache\logging\log4j\log4j-core\2.17.1\log4j-core-2.17.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\mysql\mysql-connector-java\8.0.17\mysql-connector-java-8.0.17.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\com\google\protobuf\protobuf-java\3.6.1\protobuf-java-3.6.1.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.7.2\junit-jupiter-api-5.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\platform\junit-platform-commons\1.7.2\junit-platform-commons-1.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.7.2\junit-jupiter-engine-5.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\junit\platform\junit-platform-engine\1.7.2\junit-platform-engine-1.7.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\net\bytebuddy\byte-buddy\1.11.19\byte-buddy-1.11.19.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.19\byte-buddy-agent-1.11.19.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\AGOUROU GUSTAVE\.m2\repository\org\mockito\mockito-junit-jupiter\4.0.0\mockito-junit-jupiter-4.0.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire13056550893759886080\surefirebooter3124363105628224193.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\AGOURO~1\AppData\Local\Temp\surefire11622158192584459957\surefirebooter6669607156332020284.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="23.0.1+11-39"/>
@@ -59,17 +59,17 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="calculateFareBikeWithDiscount" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.096"/>
-  <testcase name="calculateFareCarWithLessThanOneHourParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.004"/>
-  <testcase name="calculateFareBikeWithLessThan30minutesParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.007"/>
-  <testcase name="calculateFareCarWithDiscount" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.006"/>
-  <testcase name="calculateFareBikeTest" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.007"/>
-  <testcase name="calculateFareUnkownType" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.008"/>
-  <testcase name="calculateFareCar" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.003"/>
-  <testcase name="calculateFareBike" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.007"/>
-  <testcase name="calculateFareCarWithLessThan30minutesParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.003"/>
-  <testcase name="calculateFareCarTest" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.007"/>
-  <testcase name="calculateFareCarWithMoreThanADayParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.004"/>
-  <testcase name="calculateFareBikeWithLessThanOneHourParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.005"/>
-  <testcase name="calculateFareBikeWithFutureInTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.17"/>
+  <testcase name="calculateFareBikeWithDiscount" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.068"/>
+  <testcase name="calculateFareCarWithLessThanOneHourParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.001"/>
+  <testcase name="calculateFareBikeWithLessThan30minutesParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.005"/>
+  <testcase name="calculateFareCarWithDiscount" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0"/>
+  <testcase name="calculateFareBikeTest" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.002"/>
+  <testcase name="calculateFareUnkownType" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.004"/>
+  <testcase name="calculateFareCar" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.002"/>
+  <testcase name="calculateFareBike" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.002"/>
+  <testcase name="calculateFareCarWithLessThan30minutesParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.002"/>
+  <testcase name="calculateFareCarTest" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.002"/>
+  <testcase name="calculateFareCarWithMoreThanADayParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0"/>
+  <testcase name="calculateFareBikeWithLessThanOneHourParkingTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.002"/>
+  <testcase name="calculateFareBikeWithFutureInTime" classname="com.parkit.parkingsystem.FareCalculatorServiceTest" time="0.058"/>
 </testsuite>

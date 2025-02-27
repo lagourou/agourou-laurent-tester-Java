@@ -13,7 +13,7 @@ public class DBConstants {
 
     public static final String SAVE_TICKET = &quot;INSERT INTO ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME) VALUES (?, ?, ?, ?, ?)&quot;;
     public static final String UPDATE_TICKET = &quot;UPDATE ticket SET PRICE=?, OUT_TIME=? WHERE ID=?&quot;;
-    public static final String GET_TICKET = &quot;SELECT t.ID, t.PARKING_NUMBER, t.VEHICLE_REG_NUMBER, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE FROM ticket t, parking p WHERE t.PARKING_NUMBER = p.PARKING_NUMBER AND t.VEHICLE_REG_NUMBER=? ORDER BY t.IN_TIME DESC LIMIT 1&quot;;
+    public static final String GET_TICKET = &quot;SELECT t.ID, t.PARKING_NUMBER, t.VEHICLE_REG_NUMBER, t.PRICE, t.IN_TIME, t.OUT_TIME, p.TYPE FROM ticket t INNER JOIN parking p WHERE t.PARKING_NUMBER = p.PARKING_NUMBER AND t.VEHICLE_REG_NUMBER=? ORDER BY t.IN_TIME DESC LIMIT 1&quot;;
     public static final String COUNT_TICKET = &quot;select count(*) from ticket where VEHICLE_REG_NUMBER = ?&quot;;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
