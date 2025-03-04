@@ -203,7 +203,7 @@ class FareCalculatorServiceTest {
         // Crée une date d'entrée actuelle
         Date intTime = new Date();
 
-        // Simule le temps d'entrée pour un stationnement de 1 heure
+        // Simule le temps de sortie pour un stationnement de 1 heure
         Date outTime = new Date();
         outTime.setTime(System.currentTimeMillis() + (60 * 60 * 1000));
 
