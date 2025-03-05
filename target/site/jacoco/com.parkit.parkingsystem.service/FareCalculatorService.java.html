@@ -43,21 +43,18 @@ import com.parkit.parkingsystem.model.Ticket;
 <span class="fc" id="L43">                rate = Fare.BIKE_RATE_PER_HOUR;</span>
 <span class="fc" id="L44">                ticket.setPrice(hours * rate);</span>
             }
-            default -&gt; {
-<span class="nc" id="L47">                throw new IllegalArgumentException(&quot;Type de véhicule inconnu&quot;);</span>
-            }
         }
 
         // Condition pour remise de 5% si discount est vrai
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (discount) {</span>
-<span class="fc" id="L53">            ticket.setPrice(ticket.getPrice() * 0.95);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (discount) {</span>
+<span class="fc" id="L50">            ticket.setPrice(ticket.getPrice() * 0.95);</span>
         }
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L52">    }</span>
 
     // Méthode calculateFare pour les cas sans remise
     public void calculateFare(Ticket ticket) {
-<span class="fc" id="L59">        calculateFare(ticket, false);</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L56">        calculateFare(ticket, false);</span>
+<span class="fc" id="L57">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

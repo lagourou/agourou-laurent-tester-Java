@@ -43,9 +43,6 @@ public class FareCalculatorService {
                 rate = Fare.BIKE_RATE_PER_HOUR;
                 ticket.setPrice(hours * rate);
             }
-            default -> {
-                throw new IllegalArgumentException("Type de véhicule inconnu");
-            }
         }
 
         // Condition pour remise de 5% si discount est vrai
