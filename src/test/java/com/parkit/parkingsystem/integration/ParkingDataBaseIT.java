@@ -56,9 +56,9 @@ public class ParkingDataBaseIT {
         // Initialise le service de préparation de la base de données
         dataBasePrepareService = new DataBasePrepareService();
 
-        // Simule le choix du type de véhicule par l'utilisateur
+        // Simule le choix de l'utilisateur
         Mockito.lenient().when(inputReaderUtil.readSelection()).thenReturn(1);
-        // Simule la saisie du numéro d'immatriculation par l'utilisateur
+        // Simule la saisie de l'immatriculation
         Mockito.lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
         // Nettoie les entrées de la base de données

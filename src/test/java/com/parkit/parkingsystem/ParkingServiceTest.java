@@ -123,7 +123,7 @@ class ParkingServiceTest {
         // Simule que le prochain emplacement est disponible
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
 
-        // Simule le choix du type de véhicule
+        // Simule le choix de l'utilsateur
         when(inputReaderUtil.readSelection()).thenReturn(1);
 
         parkingSpot = parkingService.getNextParkingNumberIfAvailable();// Appel de la méthode à tester
@@ -141,7 +141,7 @@ class ParkingServiceTest {
         // Simule que le prochain emplacement n'est pas disponible
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);
 
-        // Simule le choix du type de véhicule
+        // Simule le choix de l'utilisateur
         when(inputReaderUtil.readSelection()).thenReturn(1);
 
         parkingSpot = parkingService.getNextParkingNumberIfAvailable();// Appel de la méthode à tester
@@ -154,7 +154,7 @@ class ParkingServiceTest {
 
     @Test
     void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
-        // Simule une entrée utilisateur incorrecte
+        // Simule le choix incorrect de l'utilisateur
         when(inputReaderUtil.readSelection()).thenReturn(3);
 
         ParkingSpot result = parkingService.getNextParkingNumberIfAvailable();// Appel de la méthode
