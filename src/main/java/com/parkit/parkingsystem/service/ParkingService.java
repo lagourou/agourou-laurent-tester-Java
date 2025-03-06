@@ -128,7 +128,7 @@ public class ParkingService {
             if (ticket != null) {
                 outTime = new Date(); // Mettre à jour l'heure de sortie
                 ticket.setOutTime(outTime);
-                fareCalculatorService.calculateFare(ticket, false);// Calcule des frais mais pas de remise
+                fareCalculatorService.calculateFare(ticket, ticketCount > 0);// Calcule des frais
                 isUpdated = ticketDAO.updateTicket(ticket);// Mettre à jour le ticket
             }
             if (isUpdated && ticketCount != 0) { // Si ticket mis à jour et existant

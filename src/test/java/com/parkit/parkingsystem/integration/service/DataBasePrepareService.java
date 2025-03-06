@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.integration.service;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DataBasePrepareService {
 
@@ -18,8 +19,7 @@ public class DataBasePrepareService {
 
             connection.prepareStatement("truncate table ticket").execute();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException | SQLException e) {
         } finally {
             dataBaseTestConfig.closeConnection(connection);
         }

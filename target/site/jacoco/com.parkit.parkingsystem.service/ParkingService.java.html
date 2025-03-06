@@ -128,7 +128,7 @@ public class ParkingService {
 <span class="pc bpc" id="L128" title="1 of 2 branches missed.">            if (ticket != null) {</span>
 <span class="fc" id="L129">                outTime = new Date(); // Mettre à jour l'heure de sortie</span>
 <span class="fc" id="L130">                ticket.setOutTime(outTime);</span>
-<span class="fc" id="L131">                fareCalculatorService.calculateFare(ticket, false);// Calcule des frais mais pas de remise</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">                fareCalculatorService.calculateFare(ticket, ticketCount &gt; 0);// Calcule des frais mais pas de remise</span>
 <span class="fc" id="L132">                isUpdated = ticketDAO.updateTicket(ticket);// Mettre à jour le ticket</span>
             }
 <span class="pc bpc" id="L134" title="2 of 4 branches missed.">            if (isUpdated &amp;&amp; ticketCount != 0) { // Si ticket mis à jour et existant</span>
